@@ -1,4 +1,5 @@
 import Icon from "@react-native-vector-icons/ionicons";
+import { useTheme } from "@ui-kitten/components";
 import { StyleSheet } from "react-native";
 
 
@@ -21,8 +22,6 @@ const IconProvider = (name: any ) => ({
 
 const IonIcon = ({ name, style, color, white = false }: any) => {
     const { height = 32, ...iconStyle } = StyleSheet.flatten(style || {});
-
-    // const theme = useTheme();
 
     if ( white ) {
         color = '#F2F6FF';

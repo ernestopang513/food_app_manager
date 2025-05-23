@@ -4,9 +4,15 @@ import BottomTabBar from '../components/navigation/BottomTabBar';
 import FoodStandsScreen from '../screens/inventory/FoodStandsScreen';
 import FoodStandScreen from '../screens/inventory/FoodStandScreen';
 import { Layout, useTheme } from '@ui-kitten/components';
+import StackNavigationInventory from './StackNavigationInventory';
 
+export type RootBottomParams = {
+  Inventario: undefined;
+  Pedidos: undefined;
+  Ajustes: undefined;
+}
 
-const { Navigator, Screen} = createBottomTabNavigator();
+const { Navigator, Screen} = createBottomTabNavigator<RootBottomParams>();
 
 
 const BottomTabNavigator = () => {
@@ -16,8 +22,11 @@ const BottomTabNavigator = () => {
 
     <Navigator
       tabBar={props => <BottomTabBar {...props} />}
+      screenOptions={{
+        headerShown: false
+      }}
       >
-      <Screen name= 'Inventario' component={FoodStandsScreen} />
+      <Screen name= 'Inventario' component={StackNavigationInventory} />
       <Screen name= 'Pedidos' component={FoodStandScreen} />
       <Screen name= 'Ajustes' component={FoodStandScreen} />
     </Navigator>

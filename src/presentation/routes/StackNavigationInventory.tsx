@@ -11,23 +11,22 @@ export type RootStackParamsInventory = {
     FoodStandSettinsScreen: undefined;
 }
 
-const Stack = createStackNavigator();
+const InventoryStack = createStackNavigator();
 
 const StackNavigationInventory = () => {
 
     return (
 
-    <Stack.Navigator 
+    <InventoryStack.Navigator 
         screenOptions={{
             headerShown: false,
         }}
         initialRouteName="FoodStandsScreen"
     >
-        <Stack.Screen name="FoodStandsScreen" component={FoodStandsScreen}/>
-        <Stack.Screen name="FoodStandScreen" component={FoodStandScreen}/>
-        <Stack.Screen name="FoodStandSettings" component={FoodStandSettinsScreen}/>
-    </Stack.Navigator>
-
+        <InventoryStack.Screen name="FoodStandsScreen" component={FoodStandsScreen}/>
+        <InventoryStack.Screen name="FoodStandScreen" component={FoodStandScreen}/>
+        <InventoryStack.Screen name="FoodStandSettings" component={FoodStandSettinsScreen}/>
+    </InventoryStack.Navigator>
   )
 }
 export default StackNavigationInventory

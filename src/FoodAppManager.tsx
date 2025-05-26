@@ -7,6 +7,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { IonIconsPack } from './config/adapters/IconAdapter';
 
 import './presentation/routes/gesture-handler';
+import AuthStackNavigation from './presentation/routes/auth/AuthStackNavigation';
+import { AuthProvider } from './presentation/routes/providers/AuthProvider';
+import RootStackNavigation from './presentation/routes/RootStackNavigation';
 
 
 const FoodAppManager = () => {
@@ -20,7 +23,10 @@ const FoodAppManager = () => {
         <SafeAreaProvider>
           <StatusBar backgroundColor={'white'} barStyle={'light-content'} />
           <NavigationContainer>
-            <BottomTabNavigator />
+            {/* <BottomTabNavigator /> */}
+            <AuthProvider>
+              <RootStackNavigation/>
+            </AuthProvider>
           </NavigationContainer>
         </SafeAreaProvider>
       </ApplicationProvider>

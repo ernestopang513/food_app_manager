@@ -6,6 +6,7 @@ import FoodStandScreen from '../screens/inventory/FoodStandScreen';
 import { Layout, useTheme } from '@ui-kitten/components';
 import StackNavigationInventory from './inventory/StackNavigationInventory';
 import SettingsScreen from '../screens/settings/SettingsScreen';
+import SettingsStackNavigation from './settings/SettingsStackNavigation';
 
 export type RootBottomParams = {
   Inventario: undefined;
@@ -29,7 +30,7 @@ const BottomTabNavigator = () => {
       >
       <Screen name= 'Inventario' component={StackNavigationInventory} />
       <Screen name= 'Pedidos' component={FoodStandScreen} />
-      <Screen name= 'Ajustes' component={SettingsScreen} />
+      <Screen name= 'Ajustes' component={SettingsStackNavigation} />
     </Navigator>
     </Layout>
   )

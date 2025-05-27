@@ -1,7 +1,7 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Card, Layout, Text } from "@ui-kitten/components"
 import { StyleSheet, View } from "react-native"
-import { RootStackParamsInventory } from '../../routes/StackNavigationInventory';
+import { RootStackParamsInventory } from '../../routes/inventory/StackNavigationInventory';
 
 
 export interface Sucursal {

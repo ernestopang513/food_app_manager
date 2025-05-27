@@ -11,7 +11,7 @@ import { LoadingScreen } from '../../screens/loading/LoadingScreen';
 export type AuthRootStackParams = {
     LoginScreen: undefined;
     RegisterScreen: undefined;
-    LoadingScreen: undefined;
+    // LoadingScreen: undefined;
 }
 
 
@@ -20,7 +20,7 @@ const AuthStack = createStackNavigator<AuthRootStackParams>();
 const AuthStackNavigation = () => {
   return (
     <AuthStack.Navigator
-    initialRouteName='LoadingScreen'
+    initialRouteName='LoginScreen'
     screenOptions={{
         headerShown: false,
     }}
@@ -38,11 +38,11 @@ const AuthStackNavigation = () => {
             component={RegisterScreen} 
         />
         
-        <AuthStack.Screen 
+        {/* <AuthStack.Screen 
             options={{cardStyleInterpolator: fadeAnimation}}
             name = 'LoadingScreen' 
             component={LoadingScreen} 
-        />
+        /> */}
 
     </AuthStack.Navigator>
 )

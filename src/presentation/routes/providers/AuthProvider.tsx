@@ -13,10 +13,14 @@ export const AuthProvider = ({children}: PropsWithChildren) => {
 
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
     const {checkStatus, status} = useAuthStore();
-    // const status = 'checking'
-
     useEffect(()=>{
-        checkStatus();
+      checkStatus();
+
+      // setTimeout(() => {
+      //   checkStatus();
+        
+      // }, 5000);
+
     }, [])
 
     useEffect(() => {

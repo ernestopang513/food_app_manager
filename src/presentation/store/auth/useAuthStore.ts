@@ -16,6 +16,7 @@ export interface AuthState {
     //Tomar en cuanta conexiones a internet o que se cayo el back
     login: (email: string, password: string) => Promise<boolean>;
     checkStatus: () => Promise<void>;
+    logout: () => Promise<void>;
 
 }
 
@@ -52,7 +53,12 @@ export interface AuthState {
             }
             await StorageAdapter.setItem('token', resp.token);
             set({status: 'authenticated', token: resp.token, user: resp.user});
-        }
+        },
+
+        logout: async () => {
+        await StorageAdapter.removeItem('token')
+        set({ status: 'unauthenticated', token: undefined, user: undefined})
+    }
     }))
 
 

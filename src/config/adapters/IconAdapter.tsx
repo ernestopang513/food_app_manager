@@ -1,7 +1,14 @@
 import Icon from "@react-native-vector-icons/ionicons";
 import { useTheme } from "@ui-kitten/components";
-import { StyleSheet } from "react-native";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 
+
+interface IonIconProps {
+  name: any;
+  style?: StyleProp<ViewStyle>;
+  color?: string;
+  white?: boolean;
+}
 
 const createIconsMap = () => {
     return new Proxy({}, {
@@ -20,8 +27,11 @@ const IconProvider = (name: any ) => ({
 })
 
 
-const IonIcon = ({ name, style, color, white = false }: any) => {
-    const { height = 32, ...iconStyle } = StyleSheet.flatten(style || {});
+const IonIcon = ({ name, style, color, white = false }: IonIconProps) => {
+   const flattened = StyleSheet.flatten(style || {});
+    const heightValue = flattened?.height;
+
+    const size = typeof heightValue === 'number' ? heightValue : 32;
 
     if ( white ) {
         color = '#F2F6FF';
@@ -30,7 +40,7 @@ const IonIcon = ({ name, style, color, white = false }: any) => {
       } 
 
     return (
-      <Icon name={name} size={height} color={color} style={iconStyle} />
+      <Icon name={name} size={size} color={color} style={flattened} />
     );
   }
 

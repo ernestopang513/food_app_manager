@@ -15,7 +15,6 @@ export const getAllFoodStands = async(): Promise<FoodStand[]> => {
         const foodStands = data
             .map(FoodStandMapper.foodStantResponseToEntity)
             .filter((fs): fs is FoodStand => fs !== undefined)
-        console.log(foodStands)
         return foodStands;
     } catch (error) {
         console.log(error);

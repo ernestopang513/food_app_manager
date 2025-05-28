@@ -75,9 +75,6 @@ const SettingsScreen = () => {
       </ScrollView>
     </Layout>
 
-
-
-
   )
 }
 export default SettingsScreen

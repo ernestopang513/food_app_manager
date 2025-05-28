@@ -44,7 +44,11 @@ export const LoginScreen = ({navigation}: Props) => {
 
   return (
     <Layout style={{flex: 1}}>
-      <ScrollView style={{marginHorizontal: 40}}>
+      {/* <ScrollView> */}
+      <ScrollView 
+        style={{marginHorizontal: 40}}
+        showsVerticalScrollIndicator={false}
+      >
         <Layout style={{paddingTop: height * 0.35 }}>
           <Text category="h1" >Ingresar</Text>
           <Text category="p2" >Por favor, ingrese para continuar</Text>

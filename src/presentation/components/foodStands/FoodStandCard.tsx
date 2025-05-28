@@ -2,6 +2,8 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Card, Layout, Text } from "@ui-kitten/components"
 import { StyleSheet, View } from "react-native"
 import { RootStackParamsInventory } from '../../routes/inventory/StackNavigationInventory';
+import { FoodStand, Dish } from '../../../domain/entities/foodStand';
+import { DishInfoItem } from "./DishInfoItem";
 
 
 export interface Sucursal {
@@ -11,12 +13,16 @@ export interface Sucursal {
   platillo3: number;
 }
 
-interface Props {
-  sucursal: Sucursal
-}
+// interface Props {
+//   sucursal: Sucursal
+// }
 
 type HeaderProp = {
   sucursal: string
+}
+
+interface Props {
+  foodStand: FoodStand
 }
 
 
@@ -28,37 +34,24 @@ export const Header = ({nombre}: {nombre: string}) => {
   )
 }
 
-export const FoodStandCard = ({sucursal}: Props) => {
+export const FoodStandCard = ({foodStand}: Props) => {
 
   const {navigate} = useNavigation<NavigationProp<RootStackParamsInventory>>();
 
   return (
     <Card
-        onPress={() => navigate('FoodStandScreen', {FoodStand: sucursal})}
+        onPress={() => navigate('FoodStandScreen', {FoodStand: foodStand})}
         style = {{marginTop: 20}}
-        header={() => <Header nombre={sucursal.nombre} />}
+        header={() => <Header nombre={foodStand.name} />}
     >
-        <Layout 
-          level="2"
-          style = {styles.amount}
-        >
-        <Text>Platillo1: </Text> 
-        <Text>{sucursal.platillo1}</Text>
-        </Layout>
-        <Layout 
-          level="1"
-          style = {styles.amount}
-        >
-        <Text>Platillo2: </Text> 
-        <Text>{sucursal.platillo2}</Text>
-        </Layout>
-        <Layout 
-          level="2"
-          style = {styles.amount}
-        >
-        <Text>Platillo3: </Text> 
-        <Text>{sucursal.platillo3}</Text>
-        </Layout>
+       {foodStand.foodStandDishes.map((fsDish, index) => (
+        <DishInfoItem
+          key={fsDish.id}
+          dishName={fsDish.dish.name}
+          quantity={fsDish.quantity}
+          level={index % 2 === 0 ? '2' : '1'}
+        />
+       ))}
         
     </Card>
   )

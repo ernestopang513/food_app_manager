@@ -10,11 +10,15 @@ import './presentation/routes/gesture-handler';
 import AuthStackNavigation from './presentation/routes/auth/AuthStackNavigation';
 import { AuthProvider } from './presentation/routes/providers/AuthProvider';
 import RootStackNavigation from './presentation/routes/RootStackNavigation';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+
+const queryClient = new QueryClient();
 
 
 const FoodAppManager = () => {
   return (
-    <>
+    <QueryClientProvider client ={queryClient}>
     <IconRegistry icons={IonIconsPack} />
       <ApplicationProvider
         {...eva}
@@ -30,7 +34,7 @@ const FoodAppManager = () => {
           </NavigationContainer>
         </SafeAreaProvider>
       </ApplicationProvider>
-    </>
+    </QueryClientProvider>
   )
 }
 export default FoodAppManager

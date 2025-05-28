@@ -1,5 +1,6 @@
 import { List } from '@ui-kitten/components';
 import { FoodStandCard } from './FoodStandCard';
+import { FoodStand } from '../../../domain/entities/foodStand';
 
 
 
@@ -37,16 +38,19 @@ const sucursales = [
     
 ]
 
+interface Props {
+    foodStands: FoodStand[]
+}
 
-const FoodStandsList = () => {
+const FoodStandsList = ({foodStands}: Props) => {
   return (
     <List
-        data = {sucursales}
-        keyExtractor={(item, index) => `${item.nombre}-${index}`}
+        data = {foodStands}
+        keyExtractor={(item, index) => `${item.name}-${index}`}
 
         renderItem={({item}) => {
             return (
-                <FoodStandCard sucursal = {item}/>
+                <FoodStandCard foodStand = {item}/>
             )
         }}
     />

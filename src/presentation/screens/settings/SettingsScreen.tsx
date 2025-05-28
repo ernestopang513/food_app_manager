@@ -2,6 +2,7 @@ import { Button, Divider, Icon, Layout, List, ListItem, Text, useTheme } from '@
 import { ScrollView } from 'react-native-gesture-handler';
 import MenuItem from '../../components/settings/MenuItem';
 import { useAuthStore } from '../../store/auth/useAuthStore';
+import TopNavigationLayout from '../../layouts/TopNavigationLayout';
 
 interface optionItem {
   name: string;
@@ -42,24 +43,30 @@ const SettingsScreen = () => {
 
  
   return (
+
+    <TopNavigationLayout
+      title='Ajustes'
+      
+    >
+
     <Layout style={{flex: 1, paddingHorizontal: 20, paddingTop: 10 }}>
       
       <ScrollView>
 
-        <Text 
+        {/* <Text 
           category='h2' 
           style={{marginBottom: 20}}
-        >
+          >
           Ajustes
-        </Text>
+        </Text> */}
 
         {
           optionsItemsAction.map((item, index) => (
             <MenuItem
-              key={`${item.component}+${index}`}
-              {...item}
-              isFirst = {index === 0}
-              isLast={index === optionsItemsAction.length - 1}
+            key={`${item.component}+${index}`}
+            {...item}
+            isFirst = {index === 0}
+            isLast={index === optionsItemsAction.length - 1}
             />
           ))
         }
@@ -68,12 +75,13 @@ const SettingsScreen = () => {
           style={{marginTop: 20}}
           status='danger'
           onPress={logout}  
-        >
+          >
           LogOut
         </Button>
 
       </ScrollView>
     </Layout>
+          </TopNavigationLayout>
 
   )
 }

@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import FoodStandScreen from '../../screens/inventory/FoodStandScreen';
 import SettingsScreen from '../../screens/settings/SettingsScreen';
 import { fadeAnimation } from '../shared/fade_animation';
+import FoodStandSettinsScreen from '../../screens/inventory/FoodStandSettinsScreen';
 
 
 
@@ -18,10 +19,10 @@ const SettingsStackNavigation = () => {
         }}
         initialRouteName='SettingsScreen'
     >
-        <SettingsStack.Screen name = 'FoodStandScreen' component={FoodStandScreen} />
-        <SettingsStack.Screen name = 'DishScreen' component={FoodStandScreen} />
-        <SettingsStack.Screen name = 'FoodStandDishes' component={FoodStandScreen} />
-        <SettingsStack.Screen name = 'DeliveryPoint' component={FoodStandScreen} />
+        <SettingsStack.Screen name = 'FoodStandScreen' component={FoodStandSettinsScreen} />
+        <SettingsStack.Screen name = 'DishScreen' component={FoodStandSettinsScreen} />
+        <SettingsStack.Screen name = 'FoodStandDishes' component={FoodStandSettinsScreen} />
+        <SettingsStack.Screen name = 'DeliveryPoint' component={FoodStandSettinsScreen} />
         <SettingsStack.Screen name = 'SettingsScreen' component={SettingsScreen} />
     </SettingsStack.Navigator>
   )

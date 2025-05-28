@@ -1,58 +1,41 @@
 import { List } from '@ui-kitten/components';
 import { FoodStandCard } from './FoodStandCard';
 import { FoodStand } from '../../../domain/entities/foodStand';
+import { useCallback, useState } from 'react';
+import { RefreshControl } from 'react-native';
 
 
 
-const sucursales = [
-    {
-        nombre: 'Principal',
-        platillo1: 3,
-        platillo2: 3,
-        platillo3: 3,
-    },
-    {
-        nombre: 'Anexo',
-        platillo1: 3,
-        platillo2: 3,
-        platillo3: 3,
-    },
-    {
-        nombre: 'Anexo',
-        platillo1: 3,
-        platillo2: 3,
-        platillo3: 3,
-    },
-    {
-        nombre: 'Anexo',
-        platillo1: 3,
-        platillo2: 3,
-        platillo3: 3,
-    },
-    {
-        nombre: 'Anexo',
-        platillo1: 3,
-        platillo2: 3,
-        platillo3: 3,
-    },
-    
-]
+
 
 interface Props {
     foodStands: FoodStand[]
+    onRefresh: () => Promise<void> 
 }
 
-const FoodStandsList = ({foodStands}: Props) => {
+const FoodStandsList = ({foodStands, onRefresh}: Props) => {
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const handleRefresh = useCallback(async () => {
+        setRefreshing(true);
+        try {
+            await onRefresh()
+        } finally {
+            setRefreshing(false)
+        }
+    }, [onRefresh]);
+
   return (
     <List
         data = {foodStands}
         keyExtractor={(item, index) => `${item.name}-${index}`}
 
-        renderItem={({item}) => {
-            return (
-                <FoodStandCard foodStand = {item}/>
-            )
-        }}
+        renderItem={({item}) => <FoodStandCard foodStand = {item}/>}
+
+        refreshControl={
+            <RefreshControl  refreshing={refreshing} onRefresh={handleRefresh}    />
+        }
     />
   )
 }

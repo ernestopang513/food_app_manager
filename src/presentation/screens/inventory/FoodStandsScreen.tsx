@@ -43,7 +43,8 @@ const FoodStandsScreen = () => {
     >
       <Text category='h1' >Locales</Text>
       
-      <FoodStandsList foodStands={foodStands!}/>
+      <FoodStandsList foodStands={foodStands!} onRefresh={() => refetch().then(()=>{})}/>
+      {/* <FoodStandsList foodStands={foodStands!} onRefresh={() => refetch().then(()=>{})}/> */}
 
     </Layout>
   )

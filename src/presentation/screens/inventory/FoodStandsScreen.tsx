@@ -16,26 +16,28 @@ const FoodStandsScreen = () => {
     staleTime: 0,
     // refetchInterval: 1000
   })
-  if (isLoading) {
-      return (
-          <LoadingScreen/>
-        )
-      }
-      
-      if (error) {
-          return (
-              <Layout style= {{flex: 1, justifyContent: 'center', alignContent: 'center'}} >
-                <Text style={{alignSelf: 'center'}}  category='h2' status='danger' >Error al cargar los locales.</Text>
-              </Layout>
-            )
-          }
-          
-
+  
   useFocusEffect(
     useCallback(() => {
       refetch();
     }, [refetch])
   );
+  
+  if (isLoading) {
+    return (
+      <LoadingScreen />
+    )
+  }
+
+  if (error) {
+    return (
+      <Layout style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }} >
+        <Text style={{ alignSelf: 'center' }} category='h2' status='danger' >Error al cargar los locales.</Text>
+      </Layout>
+    )
+  }
+
+
 
   return (
     <Layout
@@ -44,7 +46,6 @@ const FoodStandsScreen = () => {
       <Text category='h1' >Locales</Text>
       
       <FoodStandsList foodStands={foodStands!} onRefresh={() => refetch().then(()=>{})}/>
-      {/* <FoodStandsList foodStands={foodStands!} onRefresh={() => refetch().then(()=>{})}/> */}
 
     </Layout>
   )

@@ -1,10 +1,9 @@
 import { useNavigation, useNavigationState } from '@react-navigation/native';
-import { Divider, Icon, Layout, TopNavigation, TopNavigationAction } from '@ui-kitten/components'
-import { View, Text } from 'react-native'
+import { Divider, Icon, Layout, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components'
 
 interface Props {
     title: string;
-    subTitle: string;
+    subTitle?: string;
 
     rightAction?: () => void;
     rightActionIcon?: string;
@@ -48,9 +47,12 @@ const TopNavigationLayout = ({
 
 
   return (
-    <Layout>
+    <Layout style={{flex: 1}}>
         <TopNavigation
-            title={title}
+            // title={title}
+            title={() => (
+                <Text category='h4'>{title}</Text>
+            )}
             subtitle={subTitle}
             alignment='center'
             accessoryLeft={   !isRootScreen ? renderBackAction: undefined}

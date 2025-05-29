@@ -1,7 +1,7 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Card, Layout, Text } from "@ui-kitten/components"
 import { StyleSheet, View } from "react-native"
-import { RootStackParamsInventory } from '../../routes/inventory/StackNavigationInventory';
+import { StackParamsInventory } from '../../routes/inventory/StackNavigationInventory';
 import { FoodStand, Dish } from '../../../domain/entities/foodStand';
 import { DishInfoItem } from "./DishInfoItem";
 
@@ -36,11 +36,11 @@ export const Header = ({nombre}: {nombre: string}) => {
 
 export const FoodStandCard = ({foodStand}: Props) => {
 
-  const {navigate} = useNavigation<NavigationProp<RootStackParamsInventory>>();
+  const {navigate} = useNavigation<NavigationProp<StackParamsInventory>>();
 
   return (
     <Card
-        onPress={() => navigate('FoodStandScreen', {FoodStand: foodStand})}
+        onPress={() => navigate('FoodStandScreen', {foodStandId: foodStand.id})}
         style = {{marginTop: 20}}
         header={() => <Header nombre={foodStand.name} />}
     >

@@ -8,6 +8,8 @@ import { useQuery } from '@tanstack/react-query'
 import { LoadingScreen } from '../loading/LoadingScreen'
 import { useCallback, useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
+import TopNavigationLayout from '../../layouts/TopNavigationLayout'
+import NoticeScreen from '../../components/ui/NoticeScreen'
 const FoodStandsScreen = () => {
 
   const {data: foodStands, isLoading, error, refetch} = useQuery({
@@ -37,17 +39,27 @@ const FoodStandsScreen = () => {
     )
   }
 
+  // const foodStandError = [] as any
 
 
   return (
-    <Layout
-        style = {{paddingHorizontal: 10, flex: 1}}
+    <TopNavigationLayout
+      title='Locales'
+      subTitle='inventario'
     >
-      <Text category='h1' >Locales</Text>
-      
-      <FoodStandsList foodStands={foodStands!} onRefresh={() => refetch().then(()=>{})}/>
 
-    </Layout>
+      <Layout
+        style={{ paddingHorizontal: 10, flex: 1 }}
+      >
+        
+        {
+          ( foodStands === undefined || (foodStands.length === 0) )
+          ? <NoticeScreen title='Sin locales' message='Ve a crear locales! Pista: estan en ajustes' />
+          : <FoodStandsList foodStands={foodStands} onRefresh={() => refetch().then(() => { })} />
+        }
+
+      </Layout>
+      </TopNavigationLayout>
   )
 }
 export default FoodStandsScreen

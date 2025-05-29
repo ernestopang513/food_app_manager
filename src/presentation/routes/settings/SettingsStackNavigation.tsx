@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import FoodStandScreen from '../../screens/inventory/FoodStandScreen';
 import SettingsScreen from '../../screens/settings/SettingsScreen';
 import { fadeAnimation } from '../shared/fade_animation';
-import FoodStandSettinsScreen from '../../screens/inventory/FoodStandSettinsScreen';
+import FoodStandSettinsScreen from '../../screens/inventory/FoodStandSettingsScreen';
 
 
 

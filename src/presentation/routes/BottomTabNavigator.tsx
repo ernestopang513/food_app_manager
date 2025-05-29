@@ -8,7 +8,7 @@ import StackNavigationInventory from './inventory/StackNavigationInventory';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import SettingsStackNavigation from './settings/SettingsStackNavigation';
 import TopNavigationLayout from '../layouts/TopNavigationLayout';
-import FoodStandSettinsScreen from '../screens/inventory/FoodStandSettinsScreen';
+import FoodStandSettinsScreen from '../screens/inventory/FoodStandSettingsScreen';
 
 export type RootBottomParams = {
   Inventario: undefined;

@@ -1,7 +1,7 @@
 import { Layout } from '@ui-kitten/components'
 import { View, Text } from 'react-native'
 import TopNavigationLayout from '../../layouts/TopNavigationLayout'
-const FoodStandSettinsScreen = () => {
+const FoodStandSettingsScreen = () => {
   return (
 
     <TopNavigationLayout
@@ -15,4 +15,4 @@ const FoodStandSettinsScreen = () => {
     </TopNavigationLayout>
   )
 }
-export default FoodStandSettinsScreen
+export default FoodStandSettingsScreen

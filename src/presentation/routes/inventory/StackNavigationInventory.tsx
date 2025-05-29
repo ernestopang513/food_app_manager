@@ -2,19 +2,20 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { View, Text } from 'react-native'
 import FoodStandsScreen from "../../screens/inventory/FoodStandsScreen";
 import FoodStandScreen from "../../screens/inventory/FoodStandScreen";
-import FoodStandSettinsScreen from '../../screens/inventory/FoodStandSettinsScreen';
+import FoodStandSettinsScreen from '../../screens/inventory/FoodStandSettingsScreen';
 import { Sucursal } from "../../components/foodStands/FoodStandCard";
 import { LoadingScreen } from "../../screens/loading/LoadingScreen";
 import { fadeAnimation } from "../shared/fade_animation";
 import { FoodStand } from "../../../domain/entities/foodStand";
+import FoodStandSettingsScreen from "../../screens/inventory/FoodStandSettingsScreen";
 
-export type RootStackParamsInventory = {
+export type StackParamsInventory = {
     FoodStandsScreen: undefined;
-    FoodStandScreen: {FoodStand: FoodStand};
-    FoodStandSettinsScreen: undefined;
+    FoodStandScreen: {foodStandId: string};
+    FoodStandSettingsScreen: undefined;
 }
 
-const InventoryStack = createStackNavigator();
+const InventoryStack = createStackNavigator<StackParamsInventory>();
 
 const StackNavigationInventory = () => {
 
@@ -41,8 +42,8 @@ const StackNavigationInventory = () => {
             }}
             />
         <InventoryStack.Screen 
-            name="FoodStandSettings" 
-            component={FoodStandSettinsScreen}
+            name="FoodStandSettingsScreen" 
+            component={FoodStandSettingsScreen}
             options={{
                 cardStyleInterpolator: fadeAnimation
             }}

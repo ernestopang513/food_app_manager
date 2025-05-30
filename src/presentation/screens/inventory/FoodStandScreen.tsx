@@ -1,4 +1,3 @@
-import { Button, ButtonGroup, Card, Divider, Icon, Input, Layout, Text, useTheme } from '@ui-kitten/components'
 import TopNavigationLayout from '../../layouts/TopNavigationLayout'
 import { StackScreenProps } from '@react-navigation/stack'
 import { StackParamsInventory } from '../../routes/inventory/StackNavigationInventory'
@@ -6,11 +5,8 @@ import { useQuery } from '@tanstack/react-query'
 import { getFoodStandById } from '../../../actions/foodStands/get-foodStand-by-id'
 import { LoadingScreen } from '../loading/LoadingScreen'
 import ErrorScreen from '../../components/ui/ErrorScreen'
-import { View, ViewProps } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { FoodStand } from '../../../domain/entities/foodStand'
-import { useState } from 'react';
-import DishCardForm from '../../components/foodStands/DishCardForm'
+import DishQuantityController from './DishQuantityController'
+import NoticeScreen from '../../components/ui/NoticeScreen'
 
 
 interface Props extends StackScreenProps<StackParamsInventory, 'FoodStandScreen'>{}
@@ -24,7 +20,7 @@ const FoodStandScreen = ({route}: Props) => {
     queryKey: ['foodStand', foodStandId],
     queryFn: () => getFoodStandById(foodStandId)
   })
-  console.log(foodStand)
+
   const title = isLoading
     ? 'Cargando...'
     : error
@@ -36,11 +32,19 @@ const FoodStandScreen = ({route}: Props) => {
     >
       {isLoading && <LoadingScreen/>}
 
-      {error && <ErrorScreen message={error.message}  />}
+      {!isLoading && error && <ErrorScreen message={error.message}  />}
 
-      {foodStand && (
+      { !isLoading && !error && foodStand && (
         
         <DishQuantityController foodStand={foodStand} />
+
+      )}
+      { !isLoading && !error && !foodStand && (
+        
+        <NoticeScreen 
+          title='No se encontro información'
+          message='Posible foodStand sin info'
+        />
 
       )}
 
@@ -49,31 +53,6 @@ const FoodStandScreen = ({route}: Props) => {
 }
 export default FoodStandScreen
 
-interface Props2 {
-
-  foodStand: FoodStand
-}
-
-const DishQuantityController = ({ foodStand }: Props2) => {
-
-
-  return (
-    <KeyboardAwareScrollView
-      style={{ flex: 1, paddingHorizontal: 20 }}
-      enableOnAndroid
-      extraScrollHeight={100}
-      keyboardShouldPersistTaps='handled'
-
-    >
-
-      <Text style={{ textAlign: 'center' }}>Ingresa la cantidad para agregar </Text>
-
-      
-      <DishCardForm foodStand={foodStand} />
-
-    </KeyboardAwareScrollView>
-  )
-}
 
 
 

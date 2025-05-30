@@ -1,4 +1,4 @@
-import { Icon, Layout, Text, useTheme } from '@ui-kitten/components'
+import { Icon, Input, Layout, Text, useTheme } from '@ui-kitten/components'
 import TopNavigationLayout from '../../layouts/TopNavigationLayout'
 import { StackScreenProps } from '@react-navigation/stack'
 import { StackParamsInventory } from '../../routes/inventory/StackNavigationInventory'
@@ -6,6 +6,8 @@ import { useQuery } from '@tanstack/react-query'
 import { getFoodStandById } from '../../../actions/foodStands/get-foodStand-by-id'
 import { LoadingScreen } from '../loading/LoadingScreen'
 import ErrorScreen from '../../components/ui/ErrorScreen'
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 interface Props extends StackScreenProps<StackParamsInventory, 'FoodStandScreen'>{}
@@ -35,7 +37,30 @@ const FoodStandScreen = ({route}: Props) => {
       {error && <ErrorScreen message={error.message}  />}
 
       {foodStand && (
-        <Text status='succes' >{foodStand.name}</Text>
+        
+        <KeyboardAwareScrollView
+          style = {{flex: 1}}
+          enableOnAndroid
+          extraScrollHeight={90}
+          keyboardShouldPersistTaps= 'handled'
+        
+        >
+
+
+        <Layout>
+
+        <Text status='success' >{foodStand.name}</Text>
+
+        <Input keyboardType='numeric' style ={{marginVertical: 80}}/>
+        <Input keyboardType='numeric' style ={{marginVertical: 80}}/>
+        <Input keyboardType='numeric' style ={{marginVertical: 80}}/>
+        <Input keyboardType='numeric' style ={{marginVertical: 80}}/>
+        <Input keyboardType='numeric' style ={{marginVertical: 80}}/>
+
+        </Layout>
+       
+        </KeyboardAwareScrollView>
+
       )}
 
     </TopNavigationLayout>

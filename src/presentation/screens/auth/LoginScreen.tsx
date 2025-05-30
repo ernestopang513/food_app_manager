@@ -48,6 +48,7 @@ export const LoginScreen = ({navigation}: Props) => {
       <ScrollView 
         style={{marginHorizontal: 40}}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps='handled'
       >
         <Layout style={{paddingTop: height * 0.35 }}>
           <Text category="h1" >Ingresar</Text>

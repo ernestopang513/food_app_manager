@@ -27,7 +27,6 @@ const FoodAppManager = () => {
         <SafeAreaProvider>
           <StatusBar backgroundColor={'white'} barStyle={'light-content'} />
           <NavigationContainer>
-            {/* <BottomTabNavigator /> */}
             <AuthProvider>
               <RootStackNavigation/>
             </AuthProvider>

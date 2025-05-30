@@ -2,12 +2,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
 import { StatusBar } from 'react-native';
-import BottomTabNavigator from './presentation/routes/BottomTabNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { IonIconsPack } from './config/adapters/IconAdapter';
 
 import './presentation/routes/gesture-handler';
-import AuthStackNavigation from './presentation/routes/auth/AuthStackNavigation';
 import { AuthProvider } from './presentation/routes/providers/AuthProvider';
 import RootStackNavigation from './presentation/routes/RootStackNavigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

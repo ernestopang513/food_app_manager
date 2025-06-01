@@ -5,6 +5,9 @@ import { FoodStand } from '../../../domain/entities/foodStand'
 
 
 const DishQuantityController = ({foodStand}: {foodStand: FoodStand}) => {
+
+  const sortedDishes = [...foodStand.foodStandDishes]
+    .sort((a,b) => a.dish.name.localeCompare(b.dish.name));
  
     return (
     <KeyboardAwareScrollView
@@ -12,14 +15,17 @@ const DishQuantityController = ({foodStand}: {foodStand: FoodStand}) => {
       enableOnAndroid
       extraScrollHeight={100}
       keyboardShouldPersistTaps='handled'
-
     >
 
-      <Text style={{ textAlign: 'center' }}>Ingresa la cantidad para agregar </Text>
+      <Text style={{ textAlign: 'center' , marginTop: 20}}>Ingresa la cantidad para agregar </Text>
 
-      
-      <DishCardForm foodStand={foodStand} />
+      {
+        sortedDishes.map((item) => (
+          <DishCardForm name={item.dish.name} key={item.id} />
+        ))
+      }
 
+      <View style = {{height: 120}} />
     </KeyboardAwareScrollView>
   )
   

@@ -6,17 +6,17 @@ export interface FoodStandResponse {
     longitude:       number;
     isOpen:          boolean;
     createdAt:       Date;
-    foodStandDishes: FoodStandDish[];
+    foodStandDishes: FoodStandDishResponse[];
 }
 
-export interface FoodStandDish {
+export interface FoodStandDishResponse {
     id:        string;
     quantity:  number;
     is_active: boolean;
-    dish:      Dish;
+    dish:      DishResponse;
 }
 
-export interface Dish {
+export interface DishResponse {
     id:          string;
     price:       number;
     name:        string;

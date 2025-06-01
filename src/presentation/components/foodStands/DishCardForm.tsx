@@ -1,7 +1,8 @@
-import { Button, ButtonGroup, Card, Input, Layout, Text, Toggle } from "@ui-kitten/components"
+import { Button, ButtonGroup, Card, Input, Layout, Text, Toggle, useTheme } from "@ui-kitten/components"
 import { Formik } from "formik";
 import { useState } from "react"
-import { View } from "react-native"
+import { Switch, View } from "react-native"
+import CustomToggle from "../ui/CustomToggle";
 
 interface Props {
   name: string;
@@ -11,6 +12,8 @@ const DishCardForm = ({name}:Props) => {
       // const [selectedMethod, setSelectedMethod] = useState<'input' | 'buttons' | null>(null)
       const [status, setStatus] = useState<true | false>(false);
       const [quantity, setQuantity] = useState(0)
+
+      const theme = useTheme();
       
       const handleStatusChange = (isChecked: boolean): void => {
         setStatus(isChecked);
@@ -98,15 +101,32 @@ const DishCardForm = ({name}:Props) => {
             header={(props) => <HeaderStateControl {...props} quantity={quantity} />}
           >
 
-            <Layout style={{  alignItems: 'center',  justifyContent: 'center' }}>
-              <View style ={{height: 30}}/>
-            <Toggle
-              checked = {status}
-              onChange={handleStatusChange}
-            >
-              Activo
-            </Toggle>
-              <View style ={{height: 30}}/>
+            <Layout style={{ alignItems: 'center', justifyContent: 'center' }}>
+
+              {/* <View style={{ height: 30 }} /> */}
+
+              <CustomToggle
+                containerStyle = {{marginTop: 20}}
+                isOn={status}
+                onToggle={handleStatusChange}
+                activeColor={theme['color-primary-500']}
+              />
+
+              <Text style = {{marginTop: 20}}>
+                
+              {/* {`${status}`} */}
+
+              {
+                status
+                  ? 'Activo'
+                  : 'Inactivo' 
+              }
+              
+              </Text>
+              {/* <View style={{ height: 20 }} /> */}
+
+
+
             </Layout>
            
           </Card>

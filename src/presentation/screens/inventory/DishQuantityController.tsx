@@ -19,7 +19,7 @@ const DishQuantityController = ({foodStand}: {foodStand: FoodStand}) => {
 
       {
         sortedDishes.map((item) => (
-          <DishCardForm foodStandDish={item} key={item.id} />
+          <DishCardForm foodStandDishId={item.id} key={item.id} />
         ))
       }
 

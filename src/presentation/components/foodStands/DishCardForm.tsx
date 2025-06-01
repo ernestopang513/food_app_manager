@@ -1,87 +1,122 @@
-import { Button, ButtonGroup, Card, Input, Layout, Text } from "@ui-kitten/components"
-import React, { useState } from "react"
+import { Button, ButtonGroup, Card, Input, Layout, Text, Toggle } from "@ui-kitten/components"
+import { Formik } from "formik";
+import { useState } from "react"
 import { View } from "react-native"
-import { FoodStand } from "../../../domain/entities/foodStand"
 
 interface Props {
-  foodStand: FoodStand;
+  name: string;
 }
-const DishCardForm = ({foodStand}:Props) => {
-
+const DishCardForm = ({name}:Props) => {
     
-      const [selectedMethod, setSelectedMethod] = useState<'input' | 'buttons' | null>(null)
+      // const [selectedMethod, setSelectedMethod] = useState<'input' | 'buttons' | null>(null)
+      const [status, setStatus] = useState<true | false>(false);
       const [quantity, setQuantity] = useState(0)
-    
-    
-    
+      
+      const handleStatusChange = (isChecked: boolean): void => {
+        setStatus(isChecked);
+      }
+
       const handleInputChange = (value: string) => {
         const numericValue = parseInt(value) || 0;
         setQuantity(numericValue);
-        setSelectedMethod('input');
+        // setSelectedMethod('input');
       }
     
       const increaseQuantity = () => {
         setQuantity(prev => prev + 1);
-        setSelectedMethod('buttons');
+        // setSelectedMethod('buttons');
       };
     
       const decreaseQuantity = () => {
         setQuantity(prev => (prev > 0 ? prev - 1 : 0));
-        setSelectedMethod('buttons');
+        // setSelectedMethod('buttons');
       };
     
-      const isInputSelected = selectedMethod === 'input';
-      const isButtonsSelected = selectedMethod === 'buttons';
+      // const isInputSelected = selectedMethod === 'input';
+      // const isButtonsSelected = selectedMethod === 'buttons';
 
   return (
-    <Layout>
+    <Formik
     
-            <Layout style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 30}}>
-    
-              <Card
-                style={{ 
-                  flex: 1, 
-                  paddingVertical: 10,
-                  margin: 2, 
-                  justifyContent: 'center', 
-                  alignItems: 'center',
-                  backgroundColor: isInputSelected ? '#E0E7FF' : undefined,
-                  
-                }}
-                header={(props) => <Header {...props} foodStand={foodStand} />}
-              >
-                <Input
-                  style={{ width: 80 }}
-                  keyboardType='numeric'
-                  value={quantity.toString()}
-                  onChangeText={handleInputChange}
-                  onFocus={() => setSelectedMethod('input')}
-                />
-              </Card>
-              <Card
-                style={{ 
-                  flex: 1, 
-                  margin: 2, 
-                  paddingVertical: 10,
-                  justifyContent: 'center', 
-                  alignItems: 'center',
-                  backgroundColor: isButtonsSelected ? '#E0E7FF' : undefined, 
-                
-                }}
-                header={(props) => <Footer {...props} quantity = {quantity}/>}
-              >
-    
-                <ButtonGroup >
-                  <Button onPress={increaseQuantity} >+</Button>
-                  <Button onPress={decreaseQuantity}>-</Button>
-                </ButtonGroup>
-              </Card>
-    
-    
+      initialValues={{ quantity: 0 }}
+      
+      onSubmit={() =>{}}
+
+    >
+
+      <Layout style={{marginTop: 30}}>
+
+        <Card
+          style = {{
+          }}
+          header={(props) => <Header {...props} name={name} />}
+        >
+          <Text>Cantidad: 20</Text>
+          <View style={{height: 20}} />
+          <Text>Estado: Activo</Text>
+        </Card>
+
+
+        <Layout style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 3}}>
+
+          <Card
+            style={{
+              flex: 1,
+              margin: 2,
+              // justifyContent: 'center',
+              // alignItems: 'center',
+              // backgroundColor: isInputSelected ? '#E0E7FF' : undefined,
+
+            }}
+            header={(props) => <HeaderAddControl {...props}  />}
+          >
+            <View style = {{alignItems: 'center'}}>
+
+            <Input
+              style={{ width: 80, marginBottom: 10 }}
+              keyboardType='numeric'
+              value={quantity.toString()}
+              onChangeText={handleInputChange}
+              // onFocus={() => setSelectedMethod('input')}
+              />
+            <ButtonGroup >
+              <Button onPress={decreaseQuantity}>-</Button>
+              <Button onPress={increaseQuantity} >+</Button>
+            </ButtonGroup>
+              </View>
+          </Card>
+          <Card
+            style={{
+              flex: 1,
+              margin: 2,
+              // minHeight: 200
+              // justifyContent: 'center',
+              // alignItems: 'center',
+              // backgroundColor: isButtonsSelected ? '#E0E7FF' : undefined,
+
+            }}
+            header={(props) => <HeaderStateControl {...props} quantity={quantity} />}
+          >
+
+            <Layout style={{  alignItems: 'center',  justifyContent: 'center' }}>
+              <View style ={{height: 30}}/>
+            <Toggle
+              checked = {status}
+              onChange={handleStatusChange}
+            >
+              Activo
+            </Toggle>
+              <View style ={{height: 30}}/>
             </Layout>
-            <View style={{ height: 15 }} />
-            <Button onPress={() => setSelectedMethod(null)}>Agregar</Button>
-          </Layout>
+           
+          </Card>
+
+
+        </Layout>
+        <View style={{ height: 15 }} />
+        <Button onPress={() => console.log('Actualizar')}>Actualizar</Button>
+      </Layout>
+    </Formik>
     
   )
 }
@@ -89,17 +124,19 @@ export default DishCardForm
 
 
 
-const Header = ({  foodStand }:Props) => (
-    <View >
-      <Text category='h6'>{foodStand.foodStandDishes[0].dish.name}</Text>
-      <Text>Ingresa cantidad.</Text>
+const Header = ({  name }:Props) => (
+    <View style = {{padding: 10, backgroundColor: '#E0E7FF'}} >
+      <Text category='h6'>{name}</Text>
+      {/* <Text>.</Text> */}
     </View>
 )
-const Footer = ({quantity} : {quantity: number} ) => (
-  <>
-    <Text>Cantidad</Text>
-    <Text style={{ textAlign: 'center' }} >{quantity}</Text>
-  </>
-
-
+const HeaderAddControl = () => (
+    <View style={{paddingVertical: 10, backgroundColor: '#E0E7FF'}}>
+      <Text category="s1" style={{textAlign: "center"}}>Ingresa cantidad.</Text>
+    </View>
+)
+const HeaderStateControl = ({quantity} : {quantity: number} ) => (
+  <View style={{paddingVertical: 10, backgroundColor: '#E0E7FF'}}>
+    <Text style={{textAlign: 'center'}}>Estado</Text>
+  </View>
 )

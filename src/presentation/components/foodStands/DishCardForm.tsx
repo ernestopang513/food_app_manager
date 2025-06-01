@@ -1,16 +1,24 @@
-import { Button, ButtonGroup, Card, Input, Layout, Text, Toggle, useTheme } from "@ui-kitten/components"
+import { Button, ButtonGroup, Card, Divider, Input, Layout, Text, useTheme } from "@ui-kitten/components"
 import { Formik } from "formik";
 import { useState } from "react"
-import { Switch, View } from "react-native"
+import { View } from "react-native"
 import CustomToggle from "../ui/CustomToggle";
+import { FoodStandDish } from "../../../domain/entities/foodStand";
 
 interface Props {
+  foodStandDish: FoodStandDish;
+}
+
+interface PropsMainHeader {
   name: string;
 }
-const DishCardForm = ({name}:Props) => {
+
+const DishCardForm = ({foodStandDish}:Props) => {
+
+      const {name} = foodStandDish.dish;
+      const {quantity: ftdQuantity, is_active} = foodStandDish;
     
-      // const [selectedMethod, setSelectedMethod] = useState<'input' | 'buttons' | null>(null)
-      const [status, setStatus] = useState<true | false>(false);
+      const [status, setStatus] = useState<true | false>(is_active);
       const [quantity, setQuantity] = useState(0)
 
       const theme = useTheme();
@@ -54,9 +62,28 @@ const DishCardForm = ({name}:Props) => {
           }}
           header={(props) => <Header {...props} name={name} />}
         >
-          <Text>Cantidad: 20</Text>
-          <View style={{height: 20}} />
-          <Text>Estado: Activo</Text>
+          <View style ={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text>Cantidad:</Text>
+          <Text>{ftdQuantity}</Text>
+          </View>
+          <View style={{height: 10}} />
+          <Divider/>
+          <View style={{height: 10}} />
+          <View style ={{flexDirection: 'row', justifyContent: 'space-between'}} >
+
+          <Text>Estado: </Text>
+            <Text>
+
+              {
+                is_active
+                  ? ' Activo'
+                  : ' Inactivo'
+              }
+
+            </Text>
+
+
+              </View>
         </Card>
 
 
@@ -65,11 +92,7 @@ const DishCardForm = ({name}:Props) => {
           <Card
             style={{
               flex: 1,
-              margin: 2,
-              // justifyContent: 'center',
-              // alignItems: 'center',
-              // backgroundColor: isInputSelected ? '#E0E7FF' : undefined,
-
+              margin: 2, 
             }}
             header={(props) => <HeaderAddControl {...props}  />}
           >
@@ -80,11 +103,11 @@ const DishCardForm = ({name}:Props) => {
               keyboardType='numeric'
               value={quantity.toString()}
               onChangeText={handleInputChange}
-              // onFocus={() => setSelectedMethod('input')}
-              />
+            />
+
             <ButtonGroup >
               <Button onPress={decreaseQuantity}>-</Button>
-              <Button onPress={increaseQuantity} >+</Button>
+              <Button onPress={increaseQuantity}>+</Button>
             </ButtonGroup>
               </View>
           </Card>
@@ -92,18 +115,12 @@ const DishCardForm = ({name}:Props) => {
             style={{
               flex: 1,
               margin: 2,
-              // minHeight: 200
-              // justifyContent: 'center',
-              // alignItems: 'center',
-              // backgroundColor: isButtonsSelected ? '#E0E7FF' : undefined,
 
             }}
             header={(props) => <HeaderStateControl {...props} quantity={quantity} />}
           >
 
             <Layout style={{ alignItems: 'center', justifyContent: 'center' }}>
-
-              {/* <View style={{ height: 30 }} /> */}
 
               <CustomToggle
                 containerStyle = {{marginTop: 20}}
@@ -114,8 +131,6 @@ const DishCardForm = ({name}:Props) => {
 
               <Text style = {{marginTop: 20}}>
                 
-              {/* {`${status}`} */}
-
               {
                 status
                   ? 'Activo'
@@ -123,9 +138,6 @@ const DishCardForm = ({name}:Props) => {
               }
               
               </Text>
-              {/* <View style={{ height: 20 }} /> */}
-
-
 
             </Layout>
            
@@ -144,10 +156,9 @@ export default DishCardForm
 
 
 
-const Header = ({  name }:Props) => (
+const Header = ({ name }:PropsMainHeader) => (
     <View style = {{padding: 10, backgroundColor: '#E0E7FF'}} >
       <Text category='h6'>{name}</Text>
-      {/* <Text>.</Text> */}
     </View>
 )
 const HeaderAddControl = () => (

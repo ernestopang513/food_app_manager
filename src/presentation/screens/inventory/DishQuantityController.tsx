@@ -17,11 +17,9 @@ const DishQuantityController = ({foodStand}: {foodStand: FoodStand}) => {
       keyboardShouldPersistTaps='handled'
     >
 
-      <Text style={{ textAlign: 'center' , marginTop: 20}}>Ingresa la cantidad para agregar </Text>
-
       {
         sortedDishes.map((item) => (
-          <DishCardForm name={item.dish.name} key={item.id} />
+          <DishCardForm foodStandDish={item} key={item.id} />
         ))
       }
 

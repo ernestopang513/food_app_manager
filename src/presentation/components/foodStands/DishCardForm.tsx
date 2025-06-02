@@ -1,13 +1,13 @@
 import { Button, ButtonGroup, Card, Divider, Input, Layout, Spinner, Text, useTheme } from "@ui-kitten/components"
 import { Formik } from "formik";
-import { useRef, useState } from "react"
-import { View } from "react-native"
+import { useRef } from "react"
+import { Keyboard, View } from "react-native"
 import CustomToggle from "../ui/CustomToggle";
 import { FoodStandDish } from "../../../domain/entities/foodStand";
-import {  useQuery, useQueryClient } from "@tanstack/react-query";
+import {  useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getFoodStandDishById } from "../../../actions/foodStands/get-foodStand-dish-by-id";
-import { LoadingScreen } from "../../screens/loading/LoadingScreen";
 import SkeletonCard from "../ui/SkeletonCard";
+import { patchFoodStandDish } from "../../../actions/foodStands/patch-foodStand-dish";
 
 interface Props {
   foodStandDishId: string;
@@ -17,50 +17,36 @@ interface PropsMainHeader {
   name: string;
 }
 
+// interface 
+
 const DishCardForm = ({foodStandDishId}:Props) => {
 
       const ftdDishIdRef = useRef(foodStandDishId)
       const queryClient = useQueryClient();
 
       const {data: foodStandDish, isLoading} = useQuery({
-        queryKey: [`foodStandDish-${foodStandDishId}`],
+        queryKey: [`foodStandDish-${ftdDishIdRef.current}`],
         staleTime: 0,
         queryFn: async() => (await getFoodStandDishById(ftdDishIdRef.current))
       })
 
-    //    const foodStandDish = {
-    // dish: { name: 'Taco al pastor' },
-    // quantity: 3,
-    // is_active: true,
-  // };
-      // const {name} = foodStandDish.dish;
-      // const {quantity: ftdQuantity, is_active} = foodStandDish;
-    
-      // const [status, setStatus] = useState<true | false>(is_active);
-      // const [quantity, setQuantity] = useState(0)
+      const mutation = useMutation({
+        mutationFn: (data: Partial<FoodStandDish> ) => patchFoodStandDish({...data, id: ftdDishIdRef.current}),
+        // mutationFn: (data ) => console.log(data),
+        onSuccess: () => {
+          queryClient.invalidateQueries({queryKey: [`foodStandDish-${ftdDishIdRef.current}`]})
+          console.log('success')
+        }
+      })
+
+
+
 
       const theme = useTheme();
       
-      // const handleStatusChange = (isChecked: boolean): void => {
-      //   setStatus(isChecked);
-      // }
-
-      // const handleInputChange = (value: string) => {
-      //   const numericValue = parseInt(value) || 0;
-      //   setQuantity(numericValue);
-      //   // setSelectedMethod('input');
-      // }
     
-      // const increaseQuantity = () => {
-      //   setQuantity(prev => prev + 1);
-      //   // setSelectedMethod('buttons');
-      // };
-    
-      // const decreaseQuantity = () => {
-      //   setQuantity(prev => (prev > 0 ? prev - 1 : 0));
-      //   // setSelectedMethod('buttons');
-      // };
-    if(!foodStandDish) {
+    if(!foodStandDish || isLoading) {
+    // if(foodStandDish ) {
       return (
         <SkeletonCard style ={{ height: 200}}>
           <Text style={{textAlign: 'center', marginTop: 20}}  category="h6">Cargando datos...</Text>
@@ -68,13 +54,26 @@ const DishCardForm = ({foodStandDishId}:Props) => {
       )
     }
       
+    const initialFomrValues = {
+      quantity: 0,
+      is_active: foodStandDish.is_active ?? false 
+    }
 
   return (
     <Formik
     
-      initialValues={foodStandDish}
+      initialValues={initialFomrValues}
       
-      onSubmit={() =>{}}
+      onSubmit={(values, {setFieldValue}) => {
+        mutation.mutate(values, {
+          onSuccess: () => {
+            setFieldValue('quantity', 0);
+            Keyboard.dismiss
+          }
+        })
+      }}
+
+      
 
     >
 
@@ -85,11 +84,11 @@ const DishCardForm = ({foodStandDishId}:Props) => {
         <Card
           style = {{
           }}
-          header={(props) => <Header {...props} name={values.dish.name} />}
+          header={(props) => <Header {...props} name={foodStandDish.dish.name} />}
         >
           <View style ={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text>Cantidad:</Text>
-          <Text>{values.quantity}</Text>
+          <Text>{foodStandDish.quantity}</Text>
           </View>
           <View style={{height: 10}} />
           <Divider/>
@@ -100,7 +99,7 @@ const DishCardForm = ({foodStandDishId}:Props) => {
             <Text>
 
               {
-                values.is_active
+                foodStandDish.is_active
                   ? ' Activo'
                   : ' Inactivo'
               }
@@ -142,7 +141,7 @@ const DishCardForm = ({foodStandDishId}:Props) => {
               margin: 2,
 
             }}
-            header={(props) => <HeaderStateControl {...props} quantity={values.quantity} />}
+            header={(props) => <HeaderStateControl {...props} />}
           >
 
             <Layout style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -171,7 +170,12 @@ const DishCardForm = ({foodStandDishId}:Props) => {
 
         </Layout>
         <View style={{ height: 15 }} />
-        <Button onPress={() => console.log('Actualizar')}>Actualizar</Button>
+        <Button 
+          onPress={() =>handleSubmit()}
+          disabled = {mutation.isPending}
+        >
+          Actualizar
+        </Button>
       </Layout>
       )
     }
@@ -193,7 +197,7 @@ const HeaderAddControl = () => (
       <Text category="s1" style={{textAlign: "center"}}>Ingresa cantidad.</Text>
     </View>
 )
-const HeaderStateControl = ({quantity} : {quantity: number} ) => (
+const HeaderStateControl = () => (
   <View style={{paddingVertical: 10, backgroundColor: '#E0E7FF'}}>
     <Text style={{textAlign: 'center'}}>Estado</Text>
   </View>

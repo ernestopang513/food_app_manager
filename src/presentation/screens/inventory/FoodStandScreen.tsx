@@ -16,7 +16,7 @@ const FoodStandScreen = ({route}: Props) => {
 
   const { foodStandId } = route.params;
 
-  const {data: foodStand, isLoading, error} = useQuery({
+  const {data: foodStand, isLoading, error, refetch} = useQuery({
     queryKey: ['foodStand', foodStandId],
     queryFn: () => getFoodStandById(foodStandId)
   })
@@ -36,7 +36,7 @@ const FoodStandScreen = ({route}: Props) => {
 
       { !isLoading && !error && foodStand && (
         
-        <DishQuantityController foodStand={foodStand} />
+        <DishQuantityController foodStand={foodStand} onRefresh={() => refetch().then(()=> {})} />
 
       )}
       { !isLoading && !error && !foodStand && (

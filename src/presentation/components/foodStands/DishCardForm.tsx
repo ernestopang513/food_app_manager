@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Card, Divider, Input, Layout, Text, useTheme } from "@ui-kitten/components"
+import { Button, ButtonGroup, Card, Divider, Input, Layout, Spinner, Text, useTheme } from "@ui-kitten/components"
 import { Formik } from "formik";
 import { useRef, useState } from "react"
 import { View } from "react-native"
@@ -7,6 +7,7 @@ import { FoodStandDish } from "../../../domain/entities/foodStand";
 import {  useQuery, useQueryClient } from "@tanstack/react-query";
 import { getFoodStandDishById } from "../../../actions/foodStands/get-foodStand-dish-by-id";
 import { LoadingScreen } from "../../screens/loading/LoadingScreen";
+import SkeletonCard from "../ui/SkeletonCard";
 
 interface Props {
   foodStandDishId: string;
@@ -61,7 +62,9 @@ const DishCardForm = ({foodStandDishId}:Props) => {
       // };
     if(!foodStandDish) {
       return (
-        <LoadingScreen/>
+        <SkeletonCard style ={{ height: 200}}>
+          <Text style={{textAlign: 'center', marginTop: 20}}  category="h6">Cargando datos...</Text>
+          </SkeletonCard>
       )
     }
       

@@ -171,8 +171,12 @@ const DishCardForm = ({foodStandDishId}:Props) => {
         </Layout>
         <View style={{ height: 15 }} />
         <Button 
-          onPress={() =>handleSubmit()}
+          onPress={() =>{
+            handleSubmit()
+            Keyboard.dismiss()
+          }}
           disabled = {mutation.isPending}
+          
         >
           Actualizar
         </Button>

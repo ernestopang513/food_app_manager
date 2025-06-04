@@ -1,5 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { Card, Layout, Text } from "@ui-kitten/components"
+import { Card, Text } from "@ui-kitten/components"
 import { StyleSheet, View } from "react-native"
 import { StackParamsInventory } from '../../routes/inventory/StackNavigationInventory';
 import { FoodStand, Dish } from '../../../domain/entities/foodStand';
@@ -43,6 +43,8 @@ export const FoodStandCard = ({foodStand}: Props) => {
         onPress={() => navigate('FoodStandScreen', {foodStandId: foodStand.id})}
         style = {{marginTop: 20}}
         header={() => <Header nombre={foodStand.name} />}
+        disabled= {foodStand.isOpen? false: true}
+        status={foodStand.isOpen? "success" : "danger"}
     >
        {foodStand.foodStandDishes.map((fsDish, index) => (
         <DishInfoItem

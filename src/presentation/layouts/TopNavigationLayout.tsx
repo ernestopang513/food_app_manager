@@ -1,5 +1,7 @@
-import { useNavigation, useNavigationState } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useNavigationState, useRoute } from '@react-navigation/native';
 import { Divider, Icon, Layout, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components'
+import { useEffect } from 'react';
+import { Pressable, TouchableOpacity } from 'react-native';
 
 interface Props {
     title: string;
@@ -26,6 +28,18 @@ const TopNavigationLayout = ({
     const index = useNavigationState(state => state.index);
     const isRootScreen = index === 0
 
+    const route = useRoute();
+    const currentRouteName = route.name;
+  
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        if (isFocused) {
+            console.log('Layout activo en:', currentRouteName);
+        }
+    }, [isFocused, currentRouteName]);
+
     const renderBackAction = () => (
         <TopNavigationAction
             icon = {<Icon name='arrow-back-outline' />}
@@ -33,17 +47,32 @@ const TopNavigationLayout = ({
         />
     )
 
+
     const RenderRightAction = () => {
-        if (rightAction === undefined || rightActionIcon === undefined) return null;
+        const showOnRoutes = ['FoodStandsScreen'];
+        const shouldShow = showOnRoutes.includes(currentRouteName) && isFocused;
+
+        if (!shouldShow || !rightAction || !rightActionIcon) return null;
 
         return (
-            <TopNavigationAction
-                onPress={ rightAction }
-                icon={<Icon name={rightActionIcon}/>}
-            />
-        )
-    }
-
+            <Pressable
+                onPress={rightAction}
+                style={({ pressed }) => ({
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingHorizontal: 10,
+                    opacity: pressed ? 0.5 : 1,
+                })}
+            >
+                <Icon
+                    style={{ width: 24, height: 24 }}
+                    name={rightActionIcon}
+                    
+                />
+                <Text category="label">Abrir/Cerrar</Text>
+            </Pressable>
+        );
+    };
 
 
   return (
@@ -56,6 +85,7 @@ const TopNavigationLayout = ({
             subtitle={subTitle}
             alignment='center'
             accessoryLeft={   !isRootScreen ? renderBackAction: undefined}
+            accessoryRight={() => <RenderRightAction/>}
         />
         <Divider/>
 

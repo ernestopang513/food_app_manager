@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, ScrollView, RefreshControl, Keyboard } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import DishCardForm from '../../components/foodStands/DishCardForm'
 import { FoodStand } from '../../../domain/entities/foodStand'
@@ -33,6 +33,7 @@ const DishQuantityController = ({foodStand, onRefresh}: Props) => {
     return (
     <ScrollView
       style={{ flex: 1, paddingHorizontal: 20 }}
+      keyboardShouldPersistTaps = 'handled'
       refreshControl={
         <RefreshControl
           refreshing={refreshing}

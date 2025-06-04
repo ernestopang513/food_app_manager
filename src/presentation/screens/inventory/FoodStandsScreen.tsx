@@ -6,11 +6,16 @@ import FoodStandsList from '../../components/foodStands/FoodStandsList'
 import { getAllFoodStands } from '../../../actions/foodStands/get-all-foodStand'
 import { useQuery } from '@tanstack/react-query'
 import { LoadingScreen } from '../loading/LoadingScreen'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import TopNavigationLayout from '../../layouts/TopNavigationLayout'
 import NoticeScreen from '../../components/ui/NoticeScreen'
-const FoodStandsScreen = () => {
+import { StackParamsInventory } from '../../routes/inventory/StackNavigationInventory'
+import { StackScreenProps } from '@react-navigation/stack'
+
+interface Props extends StackScreenProps<StackParamsInventory, 'FoodStandsScreen'>{}
+
+const FoodStandsScreen = ({navigation}: Props) => {
 
   const {data: foodStands, isLoading, error, refetch} = useQuery({
     queryKey: ['foodStands'],
@@ -46,6 +51,8 @@ const FoodStandsScreen = () => {
     <TopNavigationLayout
       title='Locales'
       subTitle='inventario'
+      rightAction={() =>navigation.navigate('FoodStandSettingsScreen')}
+      rightActionIcon='toggle-sharp'
     >
 
       <Layout

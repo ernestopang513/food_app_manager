@@ -7,7 +7,7 @@ import { FoodStandMapper } from "../../infrastructure/mappers/foodStand.mapper";
 
 
 
-export const getAllFoodStands = async(): Promise<FoodStand[]> => {
+export const getAllFoodStandsWithDishes = async(): Promise<FoodStand[]> => {
 
     try {
         const {data} = await foodAppApi.get<FoodStandResponse[]>(`/food-stands`);

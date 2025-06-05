@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 interface Props {
     children?: ReactNode;
-    style: ViewStyle;
+    style?: ViewStyle;
 }
 
 

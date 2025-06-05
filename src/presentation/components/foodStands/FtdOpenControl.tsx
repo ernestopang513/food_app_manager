@@ -1,4 +1,3 @@
-
 import { Icon,  Layout, useTheme } from '@ui-kitten/components';
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
@@ -9,36 +8,40 @@ import CustomToggle2 from '../ui/CustomToggle2';
 
 interface Props {
     name: string;
-    icon: string;
-    component: string;
+    icon?: string;
+    isOpen: boolean;
     isFirst?: boolean;
     isLast?: boolean;
     state: boolean;
+    onToggle: (newValue: boolean) => void
 }
 
-const FtdOpenControl = ({name, icon, component, isFirst = false , isLast = false, state} : Props) => {
+const FtdOpenControl = ({name, icon = 'storefront-outline', isFirst = false , isLast = false, state, isOpen, onToggle} : Props) => {
 
     const theme = useTheme();
-    const navigator = useNavigation<any>();
-
+    // const navigator = useNavigation<any>();
   return (
     <>
 
         <Layout
             style= {{
                 ...styles.container,
-                // ...(isFirst && {borderTopLeftRadius: 10, borderTopRightRadius: 10, paddingTop: 10}),
-                // ...(isLast && {borderBottomLeftRadius: 10, borderBottomRightRadius: 10, paddingBlock: 10}),
+                ...(isFirst && {borderTopLeftRadius: 10, borderTopRightRadius: 10, }),
+                ...(isLast && {borderBottomLeftRadius: 10, borderBottomRightRadius: 10,}),
                 backgroundColor: theme['color-primary-100'],
+                // borderRadius: 10
             }}
         >   
             <Icon name={icon as any} style = {{marginRight: 10, height: 30}} />
             <Text>{name}</Text>
             <View style={{flex:1, alignItems: 'flex-end'}} >
             <CustomToggle2
-                isOn={true}
+                isOn={isOpen}
                 disabled= {!state}
-            />
+                activeColor={theme['color-primary-500']}            
+                onToggle={onToggle}
+                duration={200}
+                />
             </View>
         </Layout>
       

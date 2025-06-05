@@ -22,3 +22,15 @@ export interface DishResponse {
     name:        string;
     description: string;
 }
+
+
+
+export interface FoodStandPatchResponse {
+    id:        string;
+    name:      string;
+    location:  string;
+    latitude:  number;
+    longitude: number;
+    isOpen:    boolean;
+    createdAt: Date;
+}

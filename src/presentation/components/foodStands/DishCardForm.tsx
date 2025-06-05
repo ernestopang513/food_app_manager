@@ -48,9 +48,7 @@ const DishCardForm = ({foodStandDishId}:Props) => {
     if(!foodStandDish || isLoading) {
     // if(foodStandDish ) {
       return (
-        <SkeletonCard style ={{ height: 200}}>
-          <Text style={{textAlign: 'center', marginTop: 20}}  category="h6">Cargando datos...</Text>
-          </SkeletonCard>
+        <SkeletonCard style ={{ height: 200}}/>
       )
     }
       

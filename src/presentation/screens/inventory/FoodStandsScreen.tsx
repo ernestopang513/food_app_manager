@@ -3,7 +3,7 @@
 
 import { Layout, Text } from '@ui-kitten/components'
 import FoodStandsList from '../../components/foodStands/FoodStandsList'
-import { getAllFoodStands } from '../../../actions/foodStands/get-all-foodStand'
+import { getAllFoodStandsWithDishes } from '../../../actions/foodStands/get-all-foodStand'
 import { useQuery } from '@tanstack/react-query'
 import { LoadingScreen } from '../loading/LoadingScreen'
 import { useCallback } from 'react'
@@ -19,7 +19,7 @@ const FoodStandsScreen = ({navigation}: Props) => {
 
   const {data: foodStands, isLoading, error, refetch} = useQuery({
     queryKey: ['foodStands'],
-    queryFn: getAllFoodStands,
+    queryFn: getAllFoodStandsWithDishes,
     staleTime: 0,
     // refetchInterval: 1000
   })

@@ -1,5 +1,5 @@
 import { FoodStand, FoodStandDish } from '../../domain/entities/foodStand';
-import { FoodStandResponse } from '../interfaces/foodStand.response';
+import { FoodStandPatchResponse, FoodStandResponse } from '../interfaces/foodStand.response';
 
 
 
@@ -21,6 +21,14 @@ export class FoodStandMapper {
             foodStandDishes: foodStandResponse.foodStandDishes
 
 
+        }
+    }
+
+    static foodStandPatchResToOpenEntity(foodStandPatchRes: FoodStandPatchResponse): Partial<FoodStand> {
+
+        return {
+            id: foodStandPatchRes.id,
+            isOpen: foodStandPatchRes.isOpen,
         }
     }
 

@@ -4,6 +4,7 @@ import FoodStandScreen from '../../screens/inventory/FoodStandScreen';
 import SettingsScreen from '../../screens/settings/SettingsScreen';
 import { fadeAnimation } from '../shared/fade_animation';
 import FoodStandSettinsScreen from '../../screens/inventory/FoodStandSettingsScreen';
+import TemporalScreen from '../../screens/develop/TemporalScreen';
 
 
 
@@ -19,10 +20,10 @@ const SettingsStackNavigation = () => {
         }}
         initialRouteName='SettingsScreen'
     >
-        <SettingsStack.Screen name = 'FoodStandScreen' component={FoodStandSettinsScreen} />
-        <SettingsStack.Screen name = 'DishScreen' component={FoodStandSettinsScreen} />
-        <SettingsStack.Screen name = 'FoodStandDishes' component={FoodStandSettinsScreen} />
-        <SettingsStack.Screen name = 'DeliveryPoint' component={FoodStandSettinsScreen} />
+        <SettingsStack.Screen name = 'FoodStandScreen' component={TemporalScreen} />
+        <SettingsStack.Screen name = 'DishScreen' component={TemporalScreen} />
+        <SettingsStack.Screen name = 'FoodStandDishes' component={TemporalScreen} />
+        <SettingsStack.Screen name = 'DeliveryPoint' component={TemporalScreen} />
         <SettingsStack.Screen name = 'SettingsScreen' component={SettingsScreen} />
     </SettingsStack.Navigator>
   )

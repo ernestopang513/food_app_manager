@@ -83,6 +83,7 @@ const DishCardForm = ({foodStandDishId}:Props) => {
           style = {{
           }}
           header={(props) => <Header {...props} name={foodStandDish.dish.name} />}
+          disabled = {true}
         >
           <View style ={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text>Cantidad:</Text>
@@ -117,6 +118,7 @@ const DishCardForm = ({foodStandDishId}:Props) => {
               margin: 2, 
             }}
             header={(props) => <HeaderAddControl {...props}  />}
+            disabled = {true}
           >
             <View style = {{alignItems: 'center'}}>
 

@@ -113,6 +113,7 @@ import SettingsStackNavigation from './settings/SettingsStackNavigation';
 import Icon from '@react-native-vector-icons/ionicons';
 import { useTheme } from '@ui-kitten/components';
 import TemporalScreen from '../screens/develop/TemporalScreen';
+import OrderStackNavigation from './orders/OrderStackNavigation';
 
 export type RootBottomParams = {
   Inventario: undefined;
@@ -170,7 +171,7 @@ const BottomTabNavigator = () => {
         })}
       >
         <Tab.Screen name="Inventario" component={StackNavigationInventory} />
-        <Tab.Screen name="Pedidos" component={TemporalScreen} />
+        <Tab.Screen name="Pedidos" component={OrderStackNavigation} />
         <Tab.Screen name="Ajustes" component={SettingsStackNavigation} />
       </Tab.Navigator>
     </View>

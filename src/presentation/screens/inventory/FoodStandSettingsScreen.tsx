@@ -1,7 +1,5 @@
 import { Button, Divider, Icon, Layout, List, ListItem, Modal, ModalService, Text, useTheme } from '@ui-kitten/components'
 import { ScrollView } from 'react-native-gesture-handler';
-import MenuItem from '../../components/settings/MenuItem';
-import { useAuthStore } from '../../store/auth/useAuthStore';
 import TopNavigationLayout from '../../layouts/TopNavigationLayout';
 import FtdOpenControl from '../../components/foodStands/FtdOpenControl';
 import { Pressable, View } from 'react-native';
@@ -25,7 +23,6 @@ const SettingsScreen = () => {
 
   const queryClient = useQueryClient();
   const [state, setState] = useState(false)
-  const [modalVisible, setModalVisible] = useState(false);
   const [localFoodStands, setLocalFoodStands] = useState<LocalFoodStand[]>([])
 
   const {visible, disabled, openModal, closeModal, setDisabled} = useModal();

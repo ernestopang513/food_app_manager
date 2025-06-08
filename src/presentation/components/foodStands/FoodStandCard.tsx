@@ -26,7 +26,7 @@ interface Props {
 }
 
 
-export const Header = ({nombre}: {nombre: string}) => {
+const Header = ({nombre}: {nombre: string}) => {
   return (
     <View>
         <Text category="h6" style = {{marginLeft: 10, padding: 10}}>{nombre}</Text>

@@ -1,5 +1,5 @@
-import { Icon,  Layout, useTheme } from '@ui-kitten/components';
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { Icon,  Layout, Text, useTheme } from '@ui-kitten/components';
+import { View, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Separator from '../settings/Separator';
 import CustomToggle from '../ui/CustomToggle';
@@ -33,7 +33,7 @@ const FtdOpenControl = ({name, icon = 'storefront-outline', isFirst = false , is
             }}
         >   
             <Icon name={icon as any} style = {{marginRight: 10, height: 30}} />
-            <Text>{name}</Text>
+            <Text category='h6'>{name}</Text>
             <View style={{flex:1, alignItems: 'flex-end'}} >
             <CustomToggle2
                 isOn={isOpen}

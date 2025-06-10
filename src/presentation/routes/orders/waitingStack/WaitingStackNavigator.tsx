@@ -1,9 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
+import { fadeAnimation } from "../../shared/fade_animation";
+import OnWaitingScreen from "../../../screens/orders/waiting/OnWaitingScreen";
+import DeliveryPointScreen from "../../../screens/orders/waiting/DeliveryPointScreen";
 
 
 export type StackParamsWaiting = {
     OnWaitingScreen: undefined;
-    DeliveryPointScreen: {deliveryPointId: string}
+    DeliveryPointScreen: {deliveryPointId: string, dpName: string}
 
 }
 
@@ -11,9 +14,6 @@ export type StackParamsWaiting = {
 const WaitingStack = createStackNavigator<StackParamsWaiting>();
 
 
-import OnWaitingScreen from "../../../screens/orders/OnWaitingScreen";
-import { fadeAnimation } from "../../shared/fade_animation";
-import DeliveryPointScreen from "../../../screens/orders/DeliveryPointScreen";
 const WaitingStackNavigator = () => {
   return (
     <WaitingStack.Navigator

@@ -1,9 +1,9 @@
-export interface WaitingOrderResponse {
-    deliveryPoint: DeliveryPoint;
-    orders:        Order[];
+export interface WaitingOrderByDeliveryPointResponse {
+    deliveryPoint: DeliveryPointOrderResponse;
+    orders:        number;
 }
 
-export interface DeliveryPoint {
+export interface DeliveryPointOrderResponse {
     id:        string;
     name:      string;
     latitude:  number;
@@ -12,36 +12,36 @@ export interface DeliveryPoint {
 }
 
 
-export interface Order {
+export interface WaitingOrderInfoResponse {
     id:                   string;
     totalPrice:           number;
     status:               string;
     paymentMethod:        string;
     estimatedTimeMinutes: number;
     createdAt:            Date;
-    orderDish:            OrderDishOrderResp[];
-    deliveryPoint:        DeliveryPoint;
-    user:                 UserOrderResp;
+    foodStandId:          string;
+    orderDish:            OrderDishResponse[];
+    deliveryPoint:        DeliveryPointOrderResponse;
+    user:                 UserOrderResponse;
     deliveryUser:         null;
 }
 
-export interface OrderDishOrderResp {
+
+export interface OrderDishResponse {
     id:       string;
     quantity: number;
     subtotal: number;
-    dish:     DishOrderResp;
+    dish:     DishOrderResponse;
 }
 
-export interface DishOrderResp {
+export interface DishOrderResponse {
     id:          string;
     price:       number;
     name:        string;
     description: string;
 }
 
-
-
-export interface UserOrderResp {
+export interface UserOrderResponse {
     id:       string;
     email:    string;
     userName: string;
@@ -49,4 +49,3 @@ export interface UserOrderResp {
     isActive: boolean;
     role:     string;
 }
-

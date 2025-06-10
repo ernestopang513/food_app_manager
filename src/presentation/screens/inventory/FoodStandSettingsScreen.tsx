@@ -77,6 +77,9 @@ const SettingsScreen = () => {
       setDisabled(false)
       console.log('Success');
     },
+    onError: () => {
+      setDisabled(false)
+    }
   })
 
 
@@ -168,7 +171,8 @@ const SettingsScreen = () => {
           <CustomModal
             visible = {visible}
             title={'Actualizando estado'}
-            message={mutation.isPending? 'Procesando' : 'Cambio exitoso'}
+            message={mutation.isPending? 'Procesando' : mutation.error ? 'Algo salio mal' : 'Cambio exitoso'}
+            // message={mutation.isPending? 'Procesando' : 'Cambio exitoso'}
             loading ={mutation.isPending}
             disabled= {disabled}
             onClose={closeModal}

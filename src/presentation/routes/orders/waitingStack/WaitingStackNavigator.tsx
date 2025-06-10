@@ -1,7 +1,10 @@
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 import { fadeAnimation } from "../../shared/fade_animation";
 import OnWaitingScreen from "../../../screens/orders/waiting/OnWaitingScreen";
 import DeliveryPointScreen from "../../../screens/orders/waiting/DeliveryPointScreen";
+import { CommonActions, useNavigation } from "@react-navigation/native";
+import { useEffect, useRef } from "react";
+import { useOrderStore } from "../../../store/orders/useOrdersStore";
 
 
 export type StackParamsWaiting = {
@@ -15,6 +18,9 @@ const WaitingStack = createStackNavigator<StackParamsWaiting>();
 
 
 const WaitingStackNavigator = () => {
+    const navigation = useNavigation<StackNavigationProp<StackParamsWaiting>>();
+    const foodStandId = useOrderStore(state => state.foodStandId);
+ 
   return (
     <WaitingStack.Navigator
         screenOptions={{

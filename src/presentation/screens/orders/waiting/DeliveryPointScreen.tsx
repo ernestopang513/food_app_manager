@@ -4,6 +4,7 @@ import { Layout, Text } from '@ui-kitten/components'
 import { useQuery } from '@tanstack/react-query'
 import { getWaitingOrders } from '../../../../actions/orders/get-waiting-orders'
 import { useOrderStore } from '../../../store/orders/useOrdersStore'
+import OrderInfo from '../../../components/orders/OrderInfo'
 
 interface Props extends StackScreenProps<StackParamsWaiting, 'DeliveryPointScreen'>{}
 
@@ -28,9 +29,12 @@ const DeliveryPointScreen = ({route}: Props) => {
       >{dpName}</Text>
       {
         wOrdersDp?.map((item) => (
-          <Layout key={item.id}>
-            <Text>{item.id}</Text>
-          </Layout>
+          // <Layout key={item.id}>
+          //   <Text>{item.id}</Text>
+          // </Layout>
+          <OrderInfo
+            key={item.id}
+          />
         ))
       }
     </Layout>

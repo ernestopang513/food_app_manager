@@ -8,3 +8,10 @@ const OrderInfo = () => {
   )
 }
 export default OrderInfo
+
+
+const Header = () => (
+    <View>
+        
+    </View>
+)

@@ -1,10 +1,16 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import OnRouteScreen from '../../screens/orders/OnRouteScreen';
-import WaitingStackNavigator from './waitingStack/WaitingStackNavigator';
+import WaitingStackNavigator, { StackParamsWaiting } from './waitingStack/WaitingStackNavigator';
 import OrdersProfileScreen from '../../screens/orders/profile/OrdersProfileScreen';
+import { NavigatorScreenParams } from '@react-navigation/native';
 
-const Tab = createMaterialTopTabNavigator();
-
+export type OrderTabsParamList = {
+  'En camino': undefined;
+  // 'En espera': undefined; // Porque `WaitingStackNavigator` ya tiene su propio stack con params
+   'En espera': NavigatorScreenParams<StackParamsWaiting>;
+  'Entregas': undefined;
+};
+const Tab = createMaterialTopTabNavigator<OrderTabsParamList>();
 const OrderStackNavigation = () => {
   return (
     <Tab.Navigator>

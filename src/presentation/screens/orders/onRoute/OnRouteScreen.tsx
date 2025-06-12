@@ -8,38 +8,26 @@ import { NavigationProp, useNavigation } from '@react-navigation/native'
 import ErrorScreen from '../../../components/ui/ErrorScreen'
 import SkeletonCard from '../../../components/ui/SkeletonCard'
 import { StackParamsOnRoute } from '../../../routes/orders/onRouteStack/OnRouteStackNavigation'
+import { useOrderByDevliveryPoint } from '../../../hooks/orders/useOrderByDeliveryPoint'
 const OnRouteScreen = () => {
 
   const foodStandId = useOrderStore(state => state.foodStandId);
   const foodStandName = useOrderStore(state => state.foodStandName)
   const id = useAuthStore(state => state.user?.id);
-    const {data: OnRouteOrders, isLoading, isError, } = useQuery({
-      queryKey: ['onRouteOrdersByDeliveryPoint', foodStandId],
-      queryFn: () => {
-        if(!foodStandId) throw new Error('foodStandId es obligatorio')
-        if(!id) throw new Error('id de repartidor es obligatorio')
-          return getOnRouteOrders(foodStandId, id);
-      },
-      enabled: !!foodStandId && !!id
-    });
+
+  const {data: OnRouteOrders, isLoading, isError} = useOrderByDevliveryPoint({
+    queryKey: 'onRouteOrdesByDeliveryPoint',
+    foodStandId,
+    id,
+    queryFunction: () => getOnRouteOrders(foodStandId!, id!)
+  })
 
     const {navigate} = useNavigation<NavigationProp<StackParamsOnRoute>>();
-
-    //  const [refreshing, setRefreshing] = useState(false);
-    
-    //     useFocusEffect(
-    //         useCallback(() => {
-    //             refetch();
-    //         }, [refetch])
-    //     );
 
   return (
     <Layout style={{flex:1, paddingHorizontal: 20, paddingTop: 10}}>
 
-        <ScrollView
-
-            
-        >
+        <ScrollView>
             <Text category='h3' style={{textAlign: 'center'}}>{foodStandName}</Text>
            
             {

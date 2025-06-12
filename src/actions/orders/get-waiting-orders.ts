@@ -1,5 +1,5 @@
 import { foodAppApi } from "../../config/api/foodAppApi"
-import { WaitingOrderByDeliveryPointResponse, WaitingOrderInfoResponse } from '../../infrastructure/interfaces/orders.response';
+import { OrderByDeliveryPointResponse, OrderInfoResponse } from '../../infrastructure/interfaces/orders.response';
 
 
 
@@ -47,12 +47,12 @@ import { WaitingOrderByDeliveryPointResponse, WaitingOrderInfoResponse } from '.
 // }
 
 
-export function getWaitingOrders(foodStandId: string): Promise<WaitingOrderByDeliveryPointResponse[]>;
-export function getWaitingOrders(foodStandId: string, deliveryPointId: string): Promise<WaitingOrderInfoResponse[]>;
+export function getWaitingOrders(foodStandId: string): Promise<OrderByDeliveryPointResponse[]>;
+export function getWaitingOrders(foodStandId: string, deliveryPointId: string): Promise<OrderInfoResponse[]>;
 export async function getWaitingOrders (
     foodStandId: string,
     deliveryPointId?: string
-): Promise<WaitingOrderByDeliveryPointResponse[] | WaitingOrderInfoResponse[]> {
+): Promise<OrderByDeliveryPointResponse[] | OrderInfoResponse[]> {
 
     // if(!foodStandId) throw new Error('El foodStandId es obligatorio.')
 
@@ -64,10 +64,10 @@ export async function getWaitingOrders (
         const url = `/order/waiting?${params.toString()}`;
 
         if (deliveryPointId) {
-            const {data} = await foodAppApi.get<WaitingOrderByDeliveryPointResponse[]>(url);
+            const {data} = await foodAppApi.get<OrderByDeliveryPointResponse[]>(url);
             return data;
         } else {
-            const {data} = await foodAppApi.get<WaitingOrderInfoResponse[]>(url);
+            const {data} = await foodAppApi.get<OrderInfoResponse[]>(url);
             return data;
         }
 

@@ -37,11 +37,7 @@ const SettingsScreen = () => {
     // refetchInterval: 1000
   })
 
-  const handleToggle = (id: string, newValue: boolean) => {
-    openModal(true)
-    setLocalFoodStands((prev) => prev.map((stand)=>(stand.id === id ? {...stand, isOpen: newValue} : stand)));
-    mutation.mutate([{id, isOpen: newValue}])
-  }
+ 
 
   useEffect(() => {
     if(foodStands){
@@ -83,7 +79,11 @@ const SettingsScreen = () => {
   })
 
 
-  
+   const handleToggle = (id: string, newValue: boolean) => {
+    openModal(true)
+    setLocalFoodStands((prev) => prev.map((stand)=>(stand.id === id ? {...stand, isOpen: newValue} : stand)));
+    mutation.mutate([{id, isOpen: newValue}])
+  }
 
 
   return (

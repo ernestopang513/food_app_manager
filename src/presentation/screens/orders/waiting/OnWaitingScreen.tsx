@@ -11,23 +11,26 @@ import NoticeScreen from '../../../components/ui/NoticeScreen'
 import ErrorScreen from '../../../components/ui/ErrorScreen'
 const OnWaitingScreen = () => {
 
-    const {foodStandId} = useOrderStore();
+    const foodStandId = useOrderStore(values => values.foodStandId );
+    const foodStandName = useOrderStore(value => value.foodStandName);
     // const foodStandId = null;
     const { navigate } = useNavigation<NavigationProp<StackParamsWaiting>>();
     const theme = useTheme();
 
-
-
+    
+    
     const { data: waitingOrders, isLoading, error, refetch } = useQuery({
-        queryKey: ['OrdersByDeliveryPoint'],
-        queryFn: () => {
-      if(!foodStandId) throw new Error('foodStandId es requerido')
-      return getWaitingOrders( foodStandId )},
+      queryKey: ['OrdersWaitingByDeliveryPoint'],
+      queryFn: () => {
+        if(!foodStandId) throw new Error('foodStandId es requerido')
+          return getWaitingOrders( foodStandId )},
         staleTime: 0,
         enabled: !!foodStandId,
-
-    })
-
+        
+      })
+    
+      console.log(waitingOrders)
+      
     const [refreshing, setRefreshing] = useState(false);
 
     useFocusEffect(
@@ -66,6 +69,7 @@ const OnWaitingScreen = () => {
                 <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
             }
         >
+            <Text category='h3' style={{textAlign: 'center'}}>{foodStandName}</Text>
            
             {
                 isLoading && <SkeletonCard/>
@@ -84,11 +88,11 @@ const OnWaitingScreen = () => {
                             header={() => <Header nombre ={`${deliveryPoint.name}`} />}
                             key={deliveryPoint.id}
                         >
-                            <Layout style = {{flexDirection: 'row', justifyContent: 'space-between'}} >
+                            <View style = {{flexDirection: 'row', justifyContent: 'space-between'}} >
 
                             <Text category='h6' >Cantidad de ordenes: </Text>
                             <Text category='h6'>{orders}</Text>
-                            </Layout>
+                            </View>
                             {/* {
                                 orders.map((item, index) => (
                                     <OrderPreview
@@ -154,7 +158,7 @@ const Header = ({nombre}: {nombre: string}) => {
     const theme = useTheme();
   return (
     <View>
-        <Text category="h3" style = {{ padding: 10, backgroundColor: theme['color-primary-200']}}>{nombre}</Text>
+        <Text category="h4" style = {{ padding: 10, backgroundColor: theme['color-primary-200']}}>{nombre}</Text>
     </View>
   )
 }

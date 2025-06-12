@@ -1,4 +1,4 @@
-export interface WaitingOrderByDeliveryPointResponse {
+export interface OrderByDeliveryPointResponse {
     deliveryPoint: DeliveryPointOrderResponse;
     orders:        number;
 }
@@ -12,7 +12,7 @@ export interface DeliveryPointOrderResponse {
 }
 
 
-export interface WaitingOrderInfoResponse {
+export interface OrderInfoResponse {
     id:                   string;
     totalPrice:           number;
     status:               string;

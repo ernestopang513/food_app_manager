@@ -4,15 +4,16 @@ import { View, Text, StyleProp, ViewStyle } from 'react-native';
 
 interface Props {
     style?: StyleProp<ViewStyle>
+    styleWrapper?: StyleProp<ViewStyle>
 }
 
 
-const Separator = ({style}: Props ) => {
+const Separator = ({style, styleWrapper}: Props ) => {
 
     const theme = useTheme();
 
   return (
-    <View  style = {{ backgroundColor: theme['color-primary-100'] }} >
+    <View  style = {[{ backgroundColor: theme['color-primary-100'] }, styleWrapper]} >
       <View
         style = {[
             {

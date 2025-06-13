@@ -6,7 +6,6 @@ import { useAuthStore } from '../../../store/auth/useAuthStore';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StackParamsOnRoute } from '../../../routes/orders/onRouteStack/OnRouteStackNavigation';
 import { Layout, Text } from '@ui-kitten/components';
-import OrderInfo from '../../../components/orders/OrderInfo';
 import OnDeliveryOrderInfo from '../../../components/orders/OnDeliveryOrderInfo';
 import FAB from '../../../components/ui/FAB';
 

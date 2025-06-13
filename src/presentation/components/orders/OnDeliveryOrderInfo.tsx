@@ -5,6 +5,7 @@ import { getWaitingOrders } from '../../../actions/orders/get-waiting-orders';
 import { useOrderStore } from '../../store/orders/useOrdersStore';
 import Separator from '../settings/Separator';
 import { OrderDishResponse } from '../../../infrastructure/interfaces/orders.response';
+import { useAuthStore } from '../../store/auth/useAuthStore';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -17,16 +18,8 @@ interface Props {
 
 const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, orderDish, style}:Props) => {
 
-  const foodStandId = useOrderStore(state => state.foodStandId)
-
-  const {} = useQuery({
-    queryKey: [`orderOnRoute-${orderId}`],
-    queryFn:() => {
-      if(!foodStandId) throw new Error('foodStandId es requerido')
-      return getWaitingOrders(foodStandId, deliveryPointId)},
-  })
-
-
+  const foodStandId = useOrderStore(state => state.foodStandId);
+  const deliveryUserId = useAuthStore(state => state.user?.id);
 
   return (
     <Card
@@ -91,22 +84,6 @@ const Footer = () => (
       Cancelar
     </Button>
   </View>
-  {/* <View style = {{flexDirection: 'row', justifyContent: 'space-around', padding: 20, paddingBottom: 20 }}>
-    <Button
-      status='success'
-      >
-      Aceptar
-    </Button>
-    <Button
-      status='warning'
-      >
-      Regresar
-    </Button>
-    <Button
-      status='danger'
-      >
-      Cancelar
-    </Button>
-  </View> */}
+ 
   </>
 )

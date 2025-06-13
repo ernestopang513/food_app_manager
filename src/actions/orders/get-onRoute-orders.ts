@@ -15,7 +15,6 @@ export async function getOnRouteOrders(
     try {
 
         if(!deliveryPointId){
-
             const {data} = await foodAppApi.get<OrderByDeliveryPointResponse[]>(`/order/deliveryUserOrders/${id}?${params.toString()}`)
             return data;
         } else {

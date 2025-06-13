@@ -5,7 +5,7 @@ import DeliveryPointOnRouteScreen from '../../../screens/orders/onRoute/Delivery
 
 export type StackParamsOnRoute = {
     OnRouteScreen: undefined;
-    DeliveryScreen: undefined;
+    DeliveryScreen: {deliveryPointId: string, dpName: string};
 }
 
 const OnRouteStack = createStackNavigator<StackParamsOnRoute>();

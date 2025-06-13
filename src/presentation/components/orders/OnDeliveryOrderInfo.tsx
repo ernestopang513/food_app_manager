@@ -15,12 +15,12 @@ interface Props {
   orderDish: OrderDishResponse[];
 }
 
-const OrderInfo = ({totalPrice, orderId, deliveryPointId, userName, orderDish, style}:Props) => {
+const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, orderDish, style}:Props) => {
 
   const foodStandId = useOrderStore(state => state.foodStandId)
 
   const {} = useQuery({
-    queryKey: [`order-${orderId}`],
+    queryKey: [`orderOnRoute-${orderId}`],
     queryFn:() => {
       if(!foodStandId) throw new Error('foodStandId es requerido')
       return getWaitingOrders(foodStandId, deliveryPointId)},
@@ -63,7 +63,7 @@ const OrderInfo = ({totalPrice, orderId, deliveryPointId, userName, orderDish, s
     </Card>
   )
 }
-export default OrderInfo
+export default OnDeliveryOrderInfo
 
 
 const Header = ({userName}: {userName: string}) => (
@@ -73,16 +73,40 @@ const Header = ({userName}: {userName: string}) => (
 )
 
 const Footer = () => (
+  <>
   <View style = {{flexDirection: 'row', justifyContent: 'space-around', padding: 20, }}>
     <Button
       status='success'
-    >
-      Aceptar
+      >
+      Terminar
+    </Button>
+    <Button
+      status='warning'
+      >
+      Regresar
     </Button>
     <Button
       status='danger'
-    >
+      >
       Cancelar
     </Button>
   </View>
+  {/* <View style = {{flexDirection: 'row', justifyContent: 'space-around', padding: 20, paddingBottom: 20 }}>
+    <Button
+      status='success'
+      >
+      Aceptar
+    </Button>
+    <Button
+      status='warning'
+      >
+      Regresar
+    </Button>
+    <Button
+      status='danger'
+      >
+      Cancelar
+    </Button>
+  </View> */}
+  </>
 )

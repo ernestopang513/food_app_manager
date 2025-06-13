@@ -3,7 +3,7 @@ import { OrderByDeliveryPointResponse } from "../../../infrastructure/interfaces
 
 interface UseOrderByDeliveryPointParams {
     queryKey: string;
-    queryFunction: (foodStandId:string, id:string) => Promise<OrderByDeliveryPointResponse[]>;
+    queryFunction: (params: {foodStandId:string, id:string}) => Promise<OrderByDeliveryPointResponse[]>;
     foodStandId: string | undefined;
     id: string | undefined;
 }
@@ -13,7 +13,7 @@ export const useOrderByDevliveryPoint = ({queryKey, queryFunction, foodStandId, 
         queryKey: [queryKey, foodStandId],
         queryFn: () => {
             if(!foodStandId || !id) throw new Error('Faltan parametros')
-            return queryFunction(foodStandId, id);
+            return queryFunction({foodStandId, id});
         },
         enabled: !!foodStandId && !!id,
         

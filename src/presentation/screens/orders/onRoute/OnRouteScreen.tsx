@@ -1,78 +1,46 @@
-import { useQuery } from '@tanstack/react-query'
-import { Card, Layout, Text, useTheme } from '@ui-kitten/components'
-import { View, ScrollView } from 'react-native'
 import { useOrderStore } from '../../../store/orders/useOrdersStore'
 import { getOnRouteOrders } from '../../../../actions/orders/get-onRoute-orders'
 import { useAuthStore } from '../../../store/auth/useAuthStore'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
-import ErrorScreen from '../../../components/ui/ErrorScreen'
-import SkeletonCard from '../../../components/ui/SkeletonCard'
-import { StackParamsOnRoute } from '../../../routes/orders/onRouteStack/OnRouteStackNavigation'
 import { useOrderByDevliveryPoint } from '../../../hooks/orders/useOrderByDeliveryPoint'
+import DeliveryPointList from '../../../components/orders/DeliveryPointList'
+import NoticeScreen from '../../../components/ui/NoticeScreen'
+
 const OnRouteScreen = () => {
 
   const foodStandId = useOrderStore(state => state.foodStandId);
-  const foodStandName = useOrderStore(state => state.foodStandName)
+  const foodStandName = useOrderStore(state => state.foodStandName);
   const id = useAuthStore(state => state.user?.id);
+  
+  const getOrders = ({ foodStandId, id}: {foodStandId: string, id: string}) => {
+    return getOnRouteOrders(foodStandId, id);
+  }
 
-  const {data: OnRouteOrders, isLoading, isError} = useOrderByDevliveryPoint({
+  const {data: onRouteOrders, isLoading, isError} = useOrderByDevliveryPoint({
     queryKey: 'onRouteOrdesByDeliveryPoint',
     foodStandId,
     id,
-    queryFunction: () => getOnRouteOrders(foodStandId!, id!)
+    queryFunction: getOrders,
   })
 
-    const {navigate} = useNavigation<NavigationProp<StackParamsOnRoute>>();
-
+  if(!foodStandName || onRouteOrders?.length === 0){ 
+    return (
+      <NoticeScreen
+        style ={{justifyContent: 'flex-start', paddingTop: 40, alignItems: 'flex-start'}}
+        title='Sin ordenes para repartir'
+        message='Elige un foodStand en la pesaña de local.'
+      />
+    )}
+  
   return (
-    <Layout style={{flex:1, paddingHorizontal: 20, paddingTop: 10}}>
+    <DeliveryPointList
+     foodStandName = {foodStandName}
+     isLoading = {isLoading}
+     isError = {isError}
+     OnRouteOrders = {onRouteOrders}
+    />
 
-        <ScrollView>
-            <Text category='h3' style={{textAlign: 'center'}}>{foodStandName}</Text>
-           
-            {
-                isLoading && <SkeletonCard/>
-            }
-            {
-                !isLoading && OnRouteOrders && isError && 
-                <ErrorScreen/>
-            }
-            {
-                !isLoading && !isError && OnRouteOrders && 
-                OnRouteOrders.map(({deliveryPoint, orders}) => {
-                    return (
-                        <Card
-                            style ={{marginTop: 20, }}
-                            onPress={() => navigate('DeliveryScreen') }
-                            // onPress={() => {} }
-                            header={() => <Header nombre ={`${deliveryPoint.name}`} />}
-                            key={deliveryPoint.id}
-                        >
-                            <View style = {{flexDirection: 'row', justifyContent: 'space-between'}} >
-
-                            <Text category='h6' >Cantidad de ordenes: </Text>
-                            <Text category='h6'>{orders}</Text>
-                            </View>
-                           
-                        </Card>
-                    )
-                    
-                })
-            }
-
-        </ScrollView>
-
-    </Layout>
   )
 }
 export default OnRouteScreen
 
 
-const Header = ({nombre}: {nombre: string}) => {
-    const theme = useTheme();
-  return (
-    <View>
-        <Text category="h4" style = {{ padding: 10, backgroundColor: theme['color-warning-400']}}>{nombre}</Text>
-    </View>
-  )
-}

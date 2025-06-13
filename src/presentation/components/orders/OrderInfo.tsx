@@ -1,6 +1,6 @@
 import { UseMutateFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Card, Text } from '@ui-kitten/components'
-import { StyleProp, View, ViewStyle} from 'react-native'
+import { Animated, StyleProp, View, ViewStyle} from 'react-native'
 import { getWaitingOrders } from '../../../actions/orders/get-waiting-orders';
 import { useOrderStore } from '../../store/orders/useOrdersStore';
 import Separator from '../settings/Separator';
@@ -9,6 +9,7 @@ import { setOnRouteOrder } from '../../../actions/orders/set-onRoute-order';
 import { useAuthStore } from '../../store/auth/useAuthStore';
 import { User } from '../../../domain/entities/user';
 import { AxiosResponse } from 'axios';
+import { useRef } from 'react';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -20,67 +21,76 @@ interface Props {
   onAccepted: () => void
 }
 
-const OrderInfo = ({totalPrice, orderId, deliveryPointId, userName, orderDish, style, onAccepted}:Props) => {
-
+const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, style, onAccepted }: Props) => {
   const deliveryUserId = useAuthStore(state => state.user?.id)
   const queryClient = useQueryClient();
 
-  // const {} = useQuery({
-  //   queryKey: [`order-${orderId}`],
-  //   queryFn:() => {
-  //     if(!foodStandId) throw new Error('foodStandId es requerido')
-  //     return getWaitingOrders(foodStandId, deliveryPointId)},
-  // })
+  const opacityAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const hideWithAnimation = () => {
+    Animated.parallel([
+      Animated.timing(opacityAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 0.8,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      onAccepted(); // solo se llama después de la animación
+    });
+  };
 
   const mutation = useMutation({
     mutationFn: () => {
-      if(!deliveryUserId) throw new Error("Faltan parametros")
-      return setOnRouteOrder(orderId, deliveryUserId)
+      if (!deliveryUserId) throw new Error("Faltan parametros");
+      return setOnRouteOrder(orderId, deliveryUserId);
     },
     onSuccess: () => {
-      onAccepted()
-      queryClient.invalidateQueries({queryKey: [ 'onRouteOrdesByDeliveryPoint']})
-      queryClient.invalidateQueries({queryKey: [ 'OrdersForDelivery']})
-      // queryClient.invalidateQueries({queryKey: [ `waitingOrders-${deliveryPointId}`]})
-
+      queryClient.invalidateQueries({ queryKey: ['onRouteOrdesByDeliveryPoint'] });
+      queryClient.invalidateQueries({ queryKey: ['OrdersForDelivery'] });
+      hideWithAnimation(); // 👈 animación antes de cambiar
     }
-  })
+  });
 
   return (
-    <Card
-      header={() => <Header  userName={userName}/>}
-      footer={() => <Footer mutation={mutation.mutate} />}
-      style = {[{borderWidth: 2}, style]}
-      disabled = {true}
-    >
+    <Animated.View style={{
+      opacity: opacityAnim,
+      transform: [{ scale: scaleAnim }],
+    }}>
+      <Card
+        header={() => <Header userName={userName} />}
+        footer={() => <Footer mutation={mutation.mutate} />}
+        style={[{ borderWidth: 2, marginBottom: 10 }, style]}
+        disabled={true}
+      >
+        {orderDish.map((item) => (
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}
+            key={item.id}
+          >
+            <Text>{item.dish.name}:</Text>
+            <Text>{item.quantity}</Text>
+          </View>
+        ))}
 
-     {
-      orderDish.map((item) => (
-
-        <View 
-          style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }} 
-          key={item.id}
-        >
-
-          <Text  >{item.dish.name}:</Text>
-          <Text>{item.quantity}</Text>
+        <Separator styleWrapper={{ backgroundColor: 'transparent' }} />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+          <Text>Payment method:</Text>
+          <Text>Efectivo</Text>
         </View>
-      ))
-     }
-          
-      <Separator styleWrapper={{backgroundColor: 'transparent'}}/>
-      <View style = {{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10}} >
-      <Text  >Payment method:</Text>
-      <Text>Efectivo</Text>
-      </View>
-      <View style = {{flexDirection: 'row', justifyContent: 'space-between'}} >
-      <Text  >Precio total:</Text>
-      <Text>{totalPrice}</Text>
-      </View>
-
-    </Card>
-  )
-}
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text>Precio total:</Text>
+          <Text>{totalPrice}</Text>
+        </View>
+      </Card>
+    </Animated.View>
+  );
+};
 export default OrderInfo
 
 

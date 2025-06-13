@@ -5,16 +5,22 @@ import { useQuery } from '@tanstack/react-query'
 import { getWaitingOrders } from '../../../../actions/orders/get-waiting-orders'
 import { useOrderStore } from '../../../store/orders/useOrdersStore'
 import OrderInfo from '../../../components/orders/OrderInfo'
-import { ScrollView, View } from 'react-native'
+import { RefreshControl, ScrollView, View } from 'react-native'
+import { useCallback, useState } from 'react'
+import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native'
 
 interface Props extends StackScreenProps<StackParamsWaiting, 'DeliveryPointScreen'>{}
 
 const DeliveryPointScreen = ({route}: Props) => {
 
+  const [acceptedOrders, setAcceptedOrders] = useState<string[]>([])
   const foodStandId = useOrderStore(state => state.foodStandId);
   const {deliveryPointId, dpName} = route.params
   const foodStandName = useOrderStore(state => state.foodStandName);
-  const {data: wOrdersDp, isLoading, error} = useQuery({
+
+  const {goBack} = useNavigation<NavigationProp<StackParamsWaiting>>();
+
+  const {data: wOrdersDp, isLoading, isError, refetch} = useQuery({
     queryKey: [`waitingOrders-${deliveryPointId}`],
     queryFn: () => {
       if(!foodStandId) throw new Error('foodStandId es requerido')
@@ -22,10 +28,44 @@ const DeliveryPointScreen = ({route}: Props) => {
     staleTime: 0,
   });
 
+  const [refreshing, setRefreshing] = useState(false);
+  
+      useFocusEffect(
+          useCallback(() => {
+              refetch();
+          }, [refetch])
+      );
+  
+  
+      const handleRefresh = useCallback(async () => {
+          setRefreshing(true);
+          try {
+              await refetch()
+          } finally {
+              setRefreshing(false)
+          }
+      }, [refetch]);
+
+      const handleAccepted = (orderId: string) => {
+        setAcceptedOrders(prev => {
+          const newAccepted = [...prev,orderId];
+          const reaminingOrders = wOrdersDp?.filter(order => !newAccepted.includes(order.id));
+          if(!reaminingOrders || reaminingOrders.length === 0 ){
+            goBack();
+          }
+          return newAccepted
+        })
+      }
+      
+  
 
   return (
     <Layout style = {{flex: 1, paddingHorizontal: 20, paddingTop: 20}}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing= {refreshing} onRefresh={handleRefresh}/>
+        }
+      >
 
       <Text category='h2' 
         style ={{textAlign: 'center'}}
@@ -34,10 +74,8 @@ const DeliveryPointScreen = ({route}: Props) => {
         style ={{textAlign: 'center', marginBottom: 20}}
         >{foodStandName}</Text>
       {
-        wOrdersDp?.map((item) => (
-          // <Layout key={item.id}>
-          //   <Text>{item.id}</Text>
-          // </Layout>
+
+        wOrdersDp?.filter(order => !acceptedOrders.includes(order.id)).map((item) => (
           <OrderInfo
           style ={{marginVertical: 10}}
           totalPrice = {item.totalPrice}
@@ -46,6 +84,7 @@ const DeliveryPointScreen = ({route}: Props) => {
           userName = {item.user.userName}
           key={item.id}
           orderDish = {item.orderDish}
+          onAccepted={() => handleAccepted(item.id)}
           />
         ))
       }

@@ -1,10 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
+import { UseMutateFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Card, Text } from '@ui-kitten/components'
 import { StyleProp, View, ViewStyle} from 'react-native'
 import { getWaitingOrders } from '../../../actions/orders/get-waiting-orders';
 import { useOrderStore } from '../../store/orders/useOrdersStore';
 import Separator from '../settings/Separator';
 import { OrderDishResponse } from '../../../infrastructure/interfaces/orders.response';
+import { setOnRouteOrder } from '../../../actions/orders/set-onRoute-order';
+import { useAuthStore } from '../../store/auth/useAuthStore';
+import { User } from '../../../domain/entities/user';
+import { AxiosResponse } from 'axios';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -13,25 +17,39 @@ interface Props {
   deliveryPointId: string;
   userName: string;
   orderDish: OrderDishResponse[];
+  onAccepted: () => void
 }
 
-const OrderInfo = ({totalPrice, orderId, deliveryPointId, userName, orderDish, style}:Props) => {
+const OrderInfo = ({totalPrice, orderId, deliveryPointId, userName, orderDish, style, onAccepted}:Props) => {
 
-  const foodStandId = useOrderStore(state => state.foodStandId)
+  const deliveryUserId = useAuthStore(state => state.user?.id)
+  const queryClient = useQueryClient();
 
-  const {} = useQuery({
-    queryKey: [`order-${orderId}`],
-    queryFn:() => {
-      if(!foodStandId) throw new Error('foodStandId es requerido')
-      return getWaitingOrders(foodStandId, deliveryPointId)},
+  // const {} = useQuery({
+  //   queryKey: [`order-${orderId}`],
+  //   queryFn:() => {
+  //     if(!foodStandId) throw new Error('foodStandId es requerido')
+  //     return getWaitingOrders(foodStandId, deliveryPointId)},
+  // })
+
+  const mutation = useMutation({
+    mutationFn: () => {
+      if(!deliveryUserId) throw new Error("Faltan parametros")
+      return setOnRouteOrder(orderId, deliveryUserId)
+    },
+    onSuccess: () => {
+      onAccepted()
+      queryClient.invalidateQueries({queryKey: [ 'onRouteOrdesByDeliveryPoint']})
+      queryClient.invalidateQueries({queryKey: [ 'OrdersForDelivery']})
+      // queryClient.invalidateQueries({queryKey: [ `waitingOrders-${deliveryPointId}`]})
+
+    }
   })
-
-
 
   return (
     <Card
       header={() => <Header  userName={userName}/>}
-      footer={Footer}
+      footer={() => <Footer mutation={mutation.mutate} />}
       style = {[{borderWidth: 2}, style]}
       disabled = {true}
     >
@@ -72,9 +90,14 @@ const Header = ({userName}: {userName: string}) => (
     </View>
 )
 
-const Footer = () => (
+interface FooterProps {
+  mutation: () => void;
+}
+
+const Footer = ({mutation}:FooterProps) => (
   <View style = {{flexDirection: 'row', justifyContent: 'space-around', padding: 20, }}>
     <Button
+      onPress={mutation}
       status='success'
     >
       Aceptar

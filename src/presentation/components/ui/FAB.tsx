@@ -6,14 +6,16 @@ interface Props {
   style?: StyleProp<ViewStyle>;
   iconName: string;
   onPress: () => void;
+  iconHeight?: number;
+  label?: string;
 
 }
 
 
-const FAB = ({style, iconName, onPress}: Props) => {
+const FAB = ({style, iconName, onPress,iconHeight = 35,label}: Props) => {
   return (
     <Button
-      style = {[style, {
+      style = {[{
         // backgroundColor: 'transparent',
         shadowColor: 'black',
         shadowOffset: {
@@ -24,10 +26,12 @@ const FAB = ({style, iconName, onPress}: Props) => {
         shadowRadius: 10,
         elevation: 10,
         borderRadius:  13,
-      }]}
-      accessoryLeft={() => <Icon  style={{height: 35}} name = {iconName} white  />}
+      },style]}
+      accessoryLeft={() => <Icon  style={{height: iconHeight}} name = {iconName} white  />}
       onPress={onPress}
-    />
+    >
+      {label}
+    </Button>
   )
 }
 

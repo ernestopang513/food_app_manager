@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Button, Card, Text } from '@ui-kitten/components'
+import { Button, Card, Layout, Text } from '@ui-kitten/components'
 import { StyleProp, View, ViewStyle} from 'react-native'
 import { getWaitingOrders } from '../../../actions/orders/get-waiting-orders';
 import { useOrderStore } from '../../store/orders/useOrdersStore';
@@ -66,24 +66,27 @@ const Header = ({userName}: {userName: string}) => (
 )
 
 const Footer = () => (
-  <>
-  <View style = {{flexDirection: 'row', justifyContent: 'space-around', padding: 20, }}>
+  
+  <Layout style = {{flexDirection: 'row', justifyContent: 'space-around', padding: 10, width: '100%' }}>
     <Button
+      size='small'
       status='success'
       >
       Terminar
     </Button>
     <Button
+    size='small'
       status='warning'
       >
       Regresar
     </Button>
     <Button
+    size='small'
       status='danger'
       >
       Cancelar
     </Button>
-  </View>
+  </Layout>
  
-  </>
+ 
 )

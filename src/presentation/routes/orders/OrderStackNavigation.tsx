@@ -15,10 +15,10 @@ const Tab = createMaterialTopTabNavigator<OrderTabsParamList>();
 const OrderStackNavigation = () => {
   return (
     <Tab.Navigator>
+      <Tab.Screen name="Local" component={OrdersFoodStandScreen} />
+      <Tab.Screen name="En espera" component={WaitingStackNavigator} />
       <Tab.Screen name="En camino" component={OnRouteStackNavigation} />
       {/* <Tab.Screen name="Profile" component={TemporalScreen} /> */}
-      <Tab.Screen name="En espera" component={WaitingStackNavigator} />
-      <Tab.Screen name="Local" component={OrdersFoodStandScreen} />
     </Tab.Navigator>
   )
 }

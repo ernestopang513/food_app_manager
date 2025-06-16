@@ -1,6 +1,6 @@
 import { UseMutateFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button, Card, Text } from '@ui-kitten/components'
-import { Animated, StyleProp, View, ViewStyle} from 'react-native'
+import { Animated, LayoutAnimation, StyleProp, View, ViewStyle} from 'react-native'
 import { getWaitingOrders } from '../../../actions/orders/get-waiting-orders';
 import { useOrderStore } from '../../store/orders/useOrdersStore';
 import Separator from '../settings/Separator';
@@ -24,7 +24,6 @@ interface Props {
 const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, style, onAccepted }: Props) => {
   const deliveryUserId = useAuthStore(state => state.user?.id)
   const queryClient = useQueryClient();
-
   const opacityAnim = useRef(new Animated.Value(1)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -41,7 +40,6 @@ const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, 
         useNativeDriver: true,
       }),
     ]).start(() => {
-      onAccepted(); // solo se llama después de la animación
     });
   };
 
@@ -51,10 +49,20 @@ const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, 
       return setOnRouteOrder(orderId, deliveryUserId);
     },
     onSuccess: () => {
+      // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
       queryClient.invalidateQueries({ queryKey: ['onRouteOrdesByDeliveryPoint'] });
       queryClient.invalidateQueries({ queryKey: ['OrdersForDelivery'] });
+      onAccepted();
+      // queryClient.invalidateQueries({ queryKey: [`waitingOrders-${deliveryPointId}`] });
+      
+    },
+    onMutate: () =>{
       hideWithAnimation(); // 👈 animación antes de cambiar
+
+    }, onError: () => {
+      
     }
+
   });
 
   return (

@@ -39,7 +39,9 @@ const DeliveryPointOnRouteScreen = ({route}: Props) => {
   return (
     <>
     <Layout style = {{flex: 1, paddingHorizontal: 20, paddingTop: 20}}>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
 
       <Text category='h2' 
         style ={{textAlign: 'center'}}

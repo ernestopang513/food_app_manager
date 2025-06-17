@@ -18,9 +18,10 @@ export const connectToServer = (token: string | undefined) => {
   socket.on('connect_error', (err) => {
     console.error('❌ Error de conexión:', err.message);
   });
-  socket.on('prueba', (mensaje: string) => {
-    console.log('Prueba completada   ', mensaje)
-  })
+  
+  socket.on('disconnect', () => {
+  console.log('Socket desconectado por el servidor');
+});
 };
 
 

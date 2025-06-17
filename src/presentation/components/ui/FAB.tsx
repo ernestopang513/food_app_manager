@@ -4,7 +4,7 @@ import { StyleProp, ViewStyle, StyleSheet } from 'react-native';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
-  iconName: string;
+  iconName?: string;
   onPress: () => void;
   iconHeight?: number;
   label?: string;
@@ -12,7 +12,7 @@ interface Props {
 }
 
 
-const FAB = ({style, iconName, onPress,iconHeight = 35,label}: Props) => {
+const FAB = ({style, iconName='help-outline', onPress,iconHeight = 35,label}: Props) => {
   return (
     <Button
       style = {[{

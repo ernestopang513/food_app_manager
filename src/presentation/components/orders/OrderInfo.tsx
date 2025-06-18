@@ -10,6 +10,7 @@ import { useAuthStore } from '../../store/auth/useAuthStore';
 import { User } from '../../../domain/entities/user';
 import { AxiosResponse } from 'axios';
 import { useRef } from 'react';
+import { useFabStore } from '../../store/orders/useFabStore';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -18,14 +19,18 @@ interface Props {
   deliveryPointId: string;
   userName: string;
   orderDish: OrderDishResponse[];
-  onAccepted: () => void
+  handleOrderStatus: () => void
 }
 
-const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, style, onAccepted }: Props) => {
+const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, style, handleOrderStatus }: Props) => {
   const deliveryUserId = useAuthStore(state => state.user?.id)
   const queryClient = useQueryClient();
   const opacityAnim = useRef(new Animated.Value(1)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  const setLabel = useFabStore(state => state.setLabel);
+  const setIconName = useFabStore(state => state.setIconName);
+  const setBackgroundColor = useFabStore(state => state.setBackgroundColor);
 
   const hideWithAnimation = () => {
     Animated.parallel([
@@ -49,18 +54,20 @@ const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, 
       return setOnRouteOrder(orderId, deliveryUserId);
     },
     onSuccess: () => {
-      // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+      setLabel('Orden agregada');
+      setIconName('checkmark-circle-outline');
+      setBackgroundColor('#50C878');
       queryClient.invalidateQueries({ queryKey: ['onRouteOrdesByDeliveryPoint'] });
       queryClient.invalidateQueries({ queryKey: ['OrdersForDelivery'] });
-      onAccepted();
-      // queryClient.invalidateQueries({ queryKey: [`waitingOrders-${deliveryPointId}`] });
+      handleOrderStatus();
+      hideWithAnimation(); // 👈 animación antes de cambiar
       
     },
-    onMutate: () =>{
-      hideWithAnimation(); // 👈 animación antes de cambiar
-
-    }, onError: () => {
-      
+    onError: () => {
+      setLabel('Accion fallida');
+      setIconName('close-circle-outline');
+      setBackgroundColor('#c0392b');
+      handleOrderStatus();
     }
 
   });

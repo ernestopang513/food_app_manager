@@ -4,6 +4,9 @@ import WaitingStackNavigator, { StackParamsWaiting } from './waitingStack/Waitin
 import { NavigatorScreenParams } from '@react-navigation/native';
 import OrdersFoodStandScreen from '../../screens/orders/foodStands/OrdersFoodStandScreen';
 import OnRouteStackNavigation from './onRouteStack/OnRouteStackNavigation';
+import { useAuthStore } from '../../store/auth/useAuthStore';
+import useSocketWaitingOrders from '../../hooks/orders/socketHooks/useSocketWaitingOrders';
+import { useOrderStore } from '../../store/orders/useOrdersStore';
 
 export type OrderTabsParamList = {
   'En camino': undefined;
@@ -13,6 +16,8 @@ export type OrderTabsParamList = {
 };
 const Tab = createMaterialTopTabNavigator<OrderTabsParamList>();
 const OrderStackNavigation = () => {
+  useSocketWaitingOrders();
+
   return (
     <Tab.Navigator>
       <Tab.Screen name="Local" component={OrdersFoodStandScreen} />

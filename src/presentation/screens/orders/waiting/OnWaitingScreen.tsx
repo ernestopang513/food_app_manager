@@ -20,7 +20,7 @@ const OnWaitingScreen = () => {
     
     
     const { data: waitingOrders, isLoading, error, refetch } = useQuery({
-      queryKey: ['OrdersWaitingByDeliveryPoint'],
+      queryKey: ['OrdersWaitingByDeliveryPoints', foodStandId],
       queryFn: () => {
         if(!foodStandId) throw new Error('foodStandId es requerido')
           return getWaitingOrders( foodStandId )},
@@ -75,7 +75,7 @@ const OnWaitingScreen = () => {
                 isLoading && <SkeletonCard/>
             }
             {
-                !isLoading && waitingOrders && error && 
+                !isLoading && !waitingOrders && error && 
                 <ErrorScreen/>
             }
             {

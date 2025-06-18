@@ -20,16 +20,15 @@ type NavigationProp = CompositeNavigationProp<
 const OrdersFoodStandScreen = () => {
 
     const {data: foodStands, isLoading, error, refetch} = useQuery({
-    queryKey: ['foodStandsOrder'],
+    queryKey: ['foodStands'],
     queryFn: getAllFoodStandsWithDishes,
     staleTime: 0,
     
-    // refetchInterval: 1000
   })
 
-  const foodStandId = useOrderStore(state => state.foodStandId)
-  const setFoodStandId = useOrderStore(state => state.setFoodStandId)
-  const setFoodStandName = useOrderStore(state => state.setFoodStandName)
+  const foodStandId = useOrderStore(state => state.foodStandId);
+  const setFoodStandId = useOrderStore(state => state.setFoodStandId);
+  const setFoodStandName = useOrderStore(state => state.setFoodStandName);
 
   const navigation = useNavigation<NavigationProp>();
 
@@ -58,9 +57,9 @@ const OrdersFoodStandScreen = () => {
             onChange={() => {
               setFoodStandId(item.id);
               setFoodStandName(item.name);
-              navigation.navigate('En espera', {
-                screen: 'OnWaitingScreen', // <- tu ruta raíz del stack
-              });
+              // navigation.navigate('En espera', {
+              //   screen: 'OnWaitingScreen',
+              // });
             }}
           />
         ))

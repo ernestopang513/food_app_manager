@@ -1,5 +1,5 @@
 import { UseMutateFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Card, Text } from '@ui-kitten/components'
+import { Button, Card, Text, useTheme } from '@ui-kitten/components'
 import { Animated, LayoutAnimation, StyleProp, View, ViewStyle} from 'react-native'
 import { getWaitingOrders } from '../../../actions/orders/get-waiting-orders';
 import { useOrderStore } from '../../store/orders/useOrdersStore';
@@ -11,18 +11,18 @@ import { User } from '../../../domain/entities/user';
 import { AxiosResponse } from 'axios';
 import { useRef } from 'react';
 import { useFabStore } from '../../store/orders/useFabStore';
+import { cancelOrderDeliverUser } from '../../../actions/orders/cancel-order-deliver-user';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
   totalPrice: number;
   orderId: string;
-  deliveryPointId: string;
   userName: string;
   orderDish: OrderDishResponse[];
   handleOrderStatus: () => void
 }
 
-const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, style, handleOrderStatus }: Props) => {
+const OrderInfo = ({ totalPrice, orderId, userName, orderDish, style, handleOrderStatus }: Props) => {
   const deliveryUserId = useAuthStore(state => state.user?.id)
   const queryClient = useQueryClient();
   const opacityAnim = useRef(new Animated.Value(1)).current;
@@ -31,6 +31,8 @@ const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, 
   const setLabel = useFabStore(state => state.setLabel);
   const setIconName = useFabStore(state => state.setIconName);
   const setBackgroundColor = useFabStore(state => state.setBackgroundColor);
+
+  const theme = useTheme();
 
   const hideWithAnimation = () => {
     Animated.parallel([
@@ -48,7 +50,7 @@ const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, 
     });
   };
 
-  const mutation = useMutation({
+  const setOnRoute = useMutation({
     mutationFn: () => {
       if (!deliveryUserId) throw new Error("Faltan parametros");
       return setOnRouteOrder(orderId, deliveryUserId);
@@ -71,6 +73,31 @@ const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, 
     }
 
   });
+  
+  const cancelOrder = useMutation({
+    mutationFn: () => {
+      if (!deliveryUserId) throw new Error("Faltan parametros");
+      // return setOnRouteOrder(orderId, deliveryUserId);
+      return cancelOrderDeliverUser(orderId);
+    },
+    onSuccess: () => {
+      setLabel('Orden cancelada');
+      setIconName('checkmark-circle-outline');
+      setBackgroundColor(theme['color-warning-600']);
+      queryClient.invalidateQueries({ queryKey: ['onRouteOrdesByDeliveryPoint'] });
+      queryClient.invalidateQueries({ queryKey: ['OrdersForDelivery'] });
+      handleOrderStatus();
+      hideWithAnimation(); // 👈 animación antes de cambiar
+      
+    },
+    onError: () => {
+      setLabel('Accion fallida');
+      setIconName('close-circle-outline');
+      setBackgroundColor('#c0392b');
+      handleOrderStatus();
+    }
+
+  });
 
   return (
     <Animated.View style={{
@@ -79,7 +106,7 @@ const OrderInfo = ({ totalPrice, orderId, deliveryPointId, userName, orderDish, 
     }}>
       <Card
         header={() => <Header userName={userName} />}
-        footer={() => <Footer mutation={mutation.mutate} />}
+        footer={() => <Footer setOnRoute={setOnRoute.mutate} cancelOrder={cancelOrder.mutate} />}
         style={[{ borderWidth: 2, marginBottom: 10 }, style]}
         disabled={true}
       >
@@ -116,18 +143,20 @@ const Header = ({userName}: {userName: string}) => (
 )
 
 interface FooterProps {
-  mutation: () => void;
+  setOnRoute: () => void;
+  cancelOrder: () => void;
 }
 
-const Footer = ({mutation}:FooterProps) => (
+const Footer = ({setOnRoute, cancelOrder}:FooterProps) => (
   <View style = {{flexDirection: 'row', justifyContent: 'space-around', padding: 20, }}>
     <Button
-      onPress={mutation}
+      onPress={setOnRoute}
       status='success'
     >
       Aceptar
     </Button>
     <Button
+      onLongPress={cancelOrder}
       status='danger'
     >
       Cancelar

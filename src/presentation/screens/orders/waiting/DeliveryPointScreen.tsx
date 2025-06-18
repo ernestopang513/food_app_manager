@@ -85,7 +85,6 @@ const DeliveryPointScreen = ({route}: Props) => {
           <OrderInfo
           style ={{marginVertical: 10}}
           totalPrice = {item.totalPrice}
-          deliveryPointId = {deliveryPointId}
           orderId = {item.id}
           userName = {item.user.userName}
           key={item.id}

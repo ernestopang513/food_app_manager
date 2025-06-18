@@ -2,12 +2,10 @@ import { foodAppApi } from "../../config/api/foodAppApi";
 
 
 
-export const setOnRouteOrder = async (orderId: string, deliveryUserId: string) => {
+export const cancelOrderDeliverUser = async (orderId: string) => {
 
     try {
-        const data = await foodAppApi.patch(`/order/${orderId}/assign-delivery`, {
-            userId: deliveryUserId
-        })
+        const data = await foodAppApi.patch(`/order/${orderId}/cancelByDeliveryUser`)
         return data
     } catch (error) {
         console.log(error);

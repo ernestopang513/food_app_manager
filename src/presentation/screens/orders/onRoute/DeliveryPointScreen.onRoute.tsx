@@ -85,6 +85,13 @@ const DeliveryPointOnRouteScreen = ({route}: Props) => {
           }
 
           {
+            onRouteOrders && onRouteOrders?.length === 0 && !isLoading && !isError
+            && <View>
+              <Text status='warning' category='h5' style={{textAlign: 'center'}}>Nada que repartir</Text>
+            </View> 
+          }
+
+          {
             !isLoading && !isError && onRouteOrders?.map((item) => (
               <AnimatedCardWrapper
                 key={item.id}

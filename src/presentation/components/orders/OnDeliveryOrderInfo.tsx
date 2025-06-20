@@ -10,6 +10,7 @@ import { updateOrderStatus } from '../../../actions/orders/update-order-status';
 import { OrderStatus } from '../../../domain/enums/status';
 import { useFabStore } from '../../store/orders/useFabStore';
 import { useRef } from 'react';
+import { cancelOrderDeliverUser } from '../../../actions/orders/cancel-order-deliver-user';
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -70,6 +71,44 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
       handleOrderStatus();
     }
   })
+  const returnOrder = useMutation({
+    mutationFn: () => {
+      if(!orderId || !deliveryUserId ) throw new Error("Faltan parametros")
+      return updateOrderStatus(orderId, deliveryUserId, OrderStatus.PENDIENTE)
+    },
+    onSuccess: () => {
+      setLabel('Order entregada');
+      setIconName('checkmark-circle-outline');
+      setBackgroundColor('#50c878');
+      handleOrderStatus();
+      hideWithAnimation();
+    },
+    onError: () => {
+      setLabel('Accion fallida');
+      setIconName('close-circle-outline');
+      setBackgroundColor('#c0392b');
+      handleOrderStatus();
+    }
+  })
+  const cancelOrder = useMutation({
+    mutationFn: () => {
+      if(!orderId || !deliveryUserId ) throw new Error("Faltan parametros")
+      return cancelOrderDeliverUser(orderId);
+    },
+    onSuccess: () => {
+      setLabel('Order entregada');
+      setIconName('checkmark-circle-outline');
+      setBackgroundColor('#50c878');
+      handleOrderStatus();
+      hideWithAnimation();
+    },
+    onError: () => {
+      setLabel('Accion fallida');
+      setIconName('close-circle-outline');
+      setBackgroundColor('#c0392b');
+      handleOrderStatus();
+    }
+  })
 
   return (
     <Animated.View
@@ -81,7 +120,7 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
 
       <Card
         header={() => <Header userName={userName} />}
-        footer={() => <Footer completeOrder={completeOrder.mutate} returnOrder={() => { }} cancelOrder={() => { }} />}
+        footer={() => <Footer completeOrder={completeOrder.mutate} returnOrder={returnOrder.mutate } cancelOrder={cancelOrder.mutate} />}
         style={[{ borderWidth: 2 }, style]}
         disabled={true}
       >

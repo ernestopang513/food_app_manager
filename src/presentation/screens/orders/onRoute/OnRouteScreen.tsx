@@ -4,6 +4,8 @@ import { useAuthStore } from '../../../store/auth/useAuthStore'
 import { useOrderByDevliveryPoint } from '../../../hooks/orders/useOrderByDeliveryPoint'
 import DeliveryPointList from '../../../components/orders/DeliveryPointList'
 import NoticeScreen from '../../../components/ui/NoticeScreen'
+import { useFocusEffect } from '@react-navigation/native'
+import { useCallback } from 'react'
 
 const OnRouteScreen = () => {
 
@@ -15,14 +17,22 @@ const OnRouteScreen = () => {
     return getOnRouteOrders(foodStandId, id);
   }
 
-  const {data: onRouteOrders, isLoading, isError} = useOrderByDevliveryPoint({
+  
+  
+  const onRouteOrders = useOrderByDevliveryPoint({
     queryKey: 'onRouteOrdesByDeliveryPoint',
     foodStandId,
     id,
     queryFunction: getOrders,
   })
+  
+  useFocusEffect(
+          useCallback(() => {
+              onRouteOrders.refetch();
+          }, [onRouteOrders.refetch])
+      );
 
-  if(!foodStandName || onRouteOrders?.length === 0){ 
+  if(!foodStandName || onRouteOrders.data?.length === 0){ 
     return (
       <NoticeScreen
         style ={{justifyContent: 'flex-start', paddingTop: 40, alignItems: 'flex-start'}}
@@ -34,9 +44,9 @@ const OnRouteScreen = () => {
   return (
     <DeliveryPointList
      foodStandName = {foodStandName}
-     isLoading = {isLoading}
-     isError = {isError}
-     OnRouteOrders = {onRouteOrders}
+     isLoading = {onRouteOrders.isLoading}
+     isError = {onRouteOrders.isError}
+     OnRouteOrders = {onRouteOrders.data}
     />
 
   )

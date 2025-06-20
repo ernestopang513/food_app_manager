@@ -6,21 +6,21 @@ import { OrderInfoResponse } from "../../../infrastructure/interfaces/orders.res
 
 interface UseOrderInfo {
     queryKey: string;
-    queryFunction: (params: {foodStandId:string, id:string, deliveryPointId: string}) => Promise<OrderInfoResponse[]>;
+    queryFunction: (params: {foodStandId:string, userId:string, deliveryPointId: string}) => Promise<OrderInfoResponse[]>;
     foodStandId: string | undefined;
-    id: string | undefined;
+    userId: string | undefined;
     deliveryPointId: string | undefined
 
 }
 
 
-export const useOrderInfo = ({queryKey, queryFunction, foodStandId, id, deliveryPointId}: UseOrderInfo) => {
+export const useOrderInfo = ({queryKey, queryFunction, foodStandId, userId, deliveryPointId}: UseOrderInfo) => {
     return useQuery({
-        queryKey: [queryKey, foodStandId, deliveryPointId],
+        queryKey: [queryKey, userId, foodStandId, deliveryPointId],
         queryFn: () => {
-            if(!foodStandId || !id || !deliveryPointId) throw new Error('Faltan parametros.')
-            return queryFunction({foodStandId, id, deliveryPointId})
+            if(!foodStandId || !userId || !deliveryPointId) throw new Error('Faltan parametros.')
+            return queryFunction({foodStandId, userId, deliveryPointId})
         },
-        enabled: !!foodStandId && !!id && !!deliveryPointId,
+        enabled: !!foodStandId && !!userId && !!deliveryPointId,
     })
 }

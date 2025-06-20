@@ -1,7 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import { fadeAnimation } from '../../shared/fade_animation';
 import OnRouteScreen from '../../../screens/orders/onRoute/OnRouteScreen';
-import DeliveryPointOnRouteScreen from '../../../screens/orders/onRoute/DeliveryPointOnRouteScreen';
+import DeliveryPointOnRouteScreen from '../../../screens/orders/onRoute/DeliveryPointScreen.onRoute';
 
 export type StackParamsOnRoute = {
     OnRouteScreen: undefined;

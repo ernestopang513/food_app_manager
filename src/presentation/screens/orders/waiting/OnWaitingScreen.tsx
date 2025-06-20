@@ -13,13 +13,12 @@ const OnWaitingScreen = () => {
 
     const foodStandId = useOrderStore(values => values.foodStandId );
     const foodStandName = useOrderStore(value => value.foodStandName);
-    // const foodStandId = null;
     const { navigate } = useNavigation<NavigationProp<StackParamsWaiting>>();
     const theme = useTheme();
 
     
     
-    const { data: waitingOrders, isLoading, error, refetch } = useQuery({
+    const waitingOrders = useQuery({
       queryKey: ['OrdersWaitingByDeliveryPoints', foodStandId],
       queryFn: () => {
         if(!foodStandId) throw new Error('foodStandId es requerido')
@@ -28,26 +27,24 @@ const OnWaitingScreen = () => {
         enabled: !!foodStandId,
         
       })
-    
-      console.log(waitingOrders)
-      
+          
     const [refreshing, setRefreshing] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
-            refetch();
-        }, [refetch])
+            waitingOrders.refetch();
+        }, [waitingOrders.refetch])
     );
 
 
     const handleRefresh = useCallback(async () => {
         setRefreshing(true);
         try {
-            await refetch()
+            await waitingOrders.refetch()
         } finally {
             setRefreshing(false)
         }
-    }, [refetch]);
+    }, [waitingOrders.refetch]);
 
     if (foodStandId === undefined) {
         return (
@@ -72,15 +69,24 @@ const OnWaitingScreen = () => {
             <Text category='h3' style={{textAlign: 'center'}}>{foodStandName}</Text>
            
             {
-                isLoading && <SkeletonCard/>
+                waitingOrders.isLoading && <SkeletonCard/>
             }
-            {
-                !isLoading && !waitingOrders && error && 
+            {   
+                !waitingOrders.isLoading && !waitingOrders.data && waitingOrders.error &&
                 <ErrorScreen/>
             }
+
+              {
+                  waitingOrders.data?.length === 0 && !waitingOrders.isError
+                  && !waitingOrders.isLoading &&
+                  <View style={{marginTop: 20, alignItems: 'center', justifyContent: 'center'}}>
+                      <Text category='h5' status='warning'>Por el momento no hay ordenes</Text>
+                  </View>
+              }
+
             {
-                !isLoading && !error && waitingOrders && 
-                waitingOrders.map(({deliveryPoint, orders}) => {
+                !waitingOrders.isLoading && !waitingOrders.error && waitingOrders.data && 
+                waitingOrders.data.map(({deliveryPoint, orders}) => {
                     return (
                         <Card
                             style ={{marginTop: 20, }}
@@ -93,16 +99,6 @@ const OnWaitingScreen = () => {
                             <Text category='h6' >Cantidad de ordenes: </Text>
                             <Text category='h6'>{orders}</Text>
                             </View>
-                            {/* {
-                                orders.map((item, index) => (
-                                    <OrderPreview
-                                        orderDishes={item.orderDish}
-                                        user = {item.user}
-                                        level = {index % 2 === 0 ? '4' : '2'}
-                                        key={item.id}
-                                    />
-                                ))
-                            } */}
                         </Card>
                     )
                     

@@ -7,6 +7,8 @@ import { LoadingScreen } from '../loading/LoadingScreen'
 import ErrorScreen from '../../components/ui/ErrorScreen'
 import DishQuantityController from './DishQuantityController'
 import NoticeScreen from '../../components/ui/NoticeScreen'
+import SkeletonCard from '../../components/ui/SkeletonCard'
+import { Layout } from '@ui-kitten/components'
 
 
 interface Props extends StackScreenProps<StackParamsInventory, 'FoodStandScreen'>{}
@@ -30,7 +32,7 @@ const FoodStandScreen = ({route}: Props) => {
     <TopNavigationLayout
       title={title}
     >
-      {isLoading && <LoadingScreen/>}
+      {isLoading && <Layout style={{flex: 1}}><SkeletonCard/></Layout>}
 
       {!isLoading && error && <ErrorScreen message={error.message}  />}
 

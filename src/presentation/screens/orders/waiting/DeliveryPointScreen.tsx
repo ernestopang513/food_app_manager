@@ -10,7 +10,7 @@ import FAB from '../../../components/ui/FAB'
 import { useAuthStore } from '../../../store/auth/useAuthStore'
 import { useFabStore } from '../../../store/orders/useFabStore'
 import useWaitingOrders from '../../../hooks/orders/queryHooks/useWaitingOrders'
-import useSocketWaitingOrders from '../../../hooks/orders/socketHooks/useSocketWaitingOrders'
+import useSocketOrders from '../../../hooks/orders/socketHooks/useSocketOrders'
 import useRefreshOnFocus from '../../../hooks/orders/useRefreshOnFocus'
 
 interface Props extends StackScreenProps<StackParamsWaiting, 'DeliveryPointScreen'>{}

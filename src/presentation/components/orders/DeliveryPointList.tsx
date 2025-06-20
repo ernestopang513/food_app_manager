@@ -30,12 +30,12 @@ const DeliveryPointList = ({
                 isLoading && <SkeletonCard/>
             }
             {
-                !isLoading && OnRouteOrders && isError && 
+                !isLoading && !OnRouteOrders && isError && 
                 <ErrorScreen/>
             }
             {
-                !isLoading && !isError && OnRouteOrders?.length && 
-                OnRouteOrders.map(({deliveryPoint, orders}) => {
+                !isLoading && !isError && OnRouteOrders && 
+                OnRouteOrders?.map(({deliveryPoint, orders}) => {
                     return (
                         <Card
                             style ={{marginTop: 20, }}
@@ -44,14 +44,11 @@ const DeliveryPointList = ({
                             key={deliveryPoint.id}
                         >
                             <View style = {{flexDirection: 'row', justifyContent: 'space-between'}} >
-
                             <Text category='h6' >Cantidad de ordenes: </Text>
                             <Text category='h6'>{orders}</Text>
                             </View>
-                           
                         </Card>
                     )
-                    
                 })
             }
 

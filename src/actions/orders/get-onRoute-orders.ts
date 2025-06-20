@@ -1,11 +1,11 @@
 import { foodAppApi } from "../../config/api/foodAppApi";
 import { OrderByDeliveryPointResponse, OrderInfoResponse } from "../../infrastructure/interfaces/orders.response";
 
-export function getOnRouteOrders(foodStandId: string, id: string): Promise<OrderByDeliveryPointResponse[]>;
-export function getOnRouteOrders(foodStandId: string, id: string, deliveryPointId: string): Promise<OrderInfoResponse[]>
+export function getOnRouteOrders(foodStandId: string, userId: string): Promise<OrderByDeliveryPointResponse[]>;
+export function getOnRouteOrders(foodStandId: string, userId: string, deliveryPointId: string): Promise<OrderInfoResponse[]>
 export async function getOnRouteOrders(
     foodStandId: string,
-    id: string,
+    userId: string,
     deliveryPointId?: string,
 ): Promise<OrderByDeliveryPointResponse[] | OrderInfoResponse[]> {
 
@@ -15,10 +15,10 @@ export async function getOnRouteOrders(
     try {
 
         if(!deliveryPointId){
-            const {data} = await foodAppApi.get<OrderByDeliveryPointResponse[]>(`/order/deliveryUserOrders/${id}?${params.toString()}`)
+            const {data} = await foodAppApi.get<OrderByDeliveryPointResponse[]>(`/order/deliveryUserOrders/${userId}?${params.toString()}`)
             return data;
         } else {
-            const {data} = await foodAppApi.get<OrderInfoResponse[]>(`/order/deliveryUserOrders/${id}?${params.toString()}`);
+            const {data} = await foodAppApi.get<OrderInfoResponse[]>(`/order/deliveryUserOrders/${userId}?${params.toString()}`);
             return data
         }
        

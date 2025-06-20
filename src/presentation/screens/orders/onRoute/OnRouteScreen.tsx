@@ -32,7 +32,7 @@ const OnRouteScreen = () => {
           }, [onRouteOrders.refetch])
       );
 
-  if(!foodStandName || onRouteOrders.data?.length === 0){ 
+  if(!foodStandName ){ 
     return (
       <NoticeScreen
         style ={{justifyContent: 'flex-start', paddingTop: 40, alignItems: 'flex-start'}}
@@ -42,6 +42,9 @@ const OnRouteScreen = () => {
     )}
   
   return (
+
+    
+
     <DeliveryPointList
      foodStandName = {foodStandName}
      isLoading = {onRouteOrders.isLoading}

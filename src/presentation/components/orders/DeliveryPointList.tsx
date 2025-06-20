@@ -33,6 +33,14 @@ const DeliveryPointList = ({
                 !isLoading && !OnRouteOrders && isError && 
                 <ErrorScreen/>
             }
+
+            {
+                OnRouteOrders && OnRouteOrders.length === 0 && !isLoading && !isError 
+                && <View style={{marginTop: 40}}>
+                    <Text style={{textAlign: 'center'}} status='warning' category='h5'>No tienes ordenes para repartir</Text>
+                </View>
+            }
+
             {
                 !isLoading && !isError && OnRouteOrders && 
                 OnRouteOrders?.map(({deliveryPoint, orders}) => {

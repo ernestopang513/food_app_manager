@@ -69,8 +69,8 @@ const DeliveryPointScreen = ({route}: Props) => {
       {
         waitingOrders.data?.length === 0 && !waitingOrders.isError 
         && !waitingOrders.isLoading && 
-        <View>
-          <Text>Por el momento no hay ordenes</Text>
+        <View style ={{marginTop: 40}}>
+          <Text style ={{textAlign: 'center'}} status='warning' category='h5' >Por el momento no hay ordenes</Text>
         </View>
       }
       

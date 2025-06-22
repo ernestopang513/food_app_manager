@@ -1,17 +1,19 @@
 
 
 
-import { Layout, Text } from '@ui-kitten/components'
+import { Icon, Layout, Text } from '@ui-kitten/components'
 import FoodStandsList from '../../components/foodStands/FoodStandsList'
 import { getAllFoodStandsWithDishes } from '../../../actions/foodStands/get-all-foodStand'
 import { useQuery } from '@tanstack/react-query'
 import { LoadingScreen } from '../loading/LoadingScreen'
 import { useCallback } from 'react'
-import { useFocusEffect } from '@react-navigation/native'
+import { NavigationProp, useFocusEffect, useNavigation } from '@react-navigation/native'
 import TopNavigationLayout from '../../layouts/TopNavigationLayout'
 import NoticeScreen from '../../components/ui/NoticeScreen'
 import { StackParamsInventory } from '../../routes/inventory/StackNavigationInventory'
 import { StackScreenProps } from '@react-navigation/stack'
+import { Pressable } from 'react-native'
+import { StackParamsSettings } from '../../routes/settings/SettingsStackNavigation'
 
 interface Props extends StackScreenProps<StackParamsInventory, 'FoodStandsScreen'>{}
 
@@ -51,8 +53,7 @@ const FoodStandsScreen = ({navigation}: Props) => {
     <TopNavigationLayout
       title='Locales'
       subTitle='inventario'
-      rightAction={() =>navigation.navigate('FoodStandSettingsScreen')}
-      rightActionIcon='toggle-sharp'
+      renderRightAction={OpenClose}
     >
 
       <Layout
@@ -71,4 +72,27 @@ const FoodStandsScreen = ({navigation}: Props) => {
 }
 export default FoodStandsScreen
 
+
+const OpenClose = () => {
+  const navigation = useNavigation<NavigationProp<StackParamsInventory>>();
+  return(
+
+    <Pressable
+      onPress={() => navigation.navigate('FoodStandSettingsScreen')}
+      style={({ pressed }) => ({
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        opacity: pressed ? 0.5 : 1,
+      })}
+    >
+      <Icon
+        style={{ width: 24, height: 24 }}
+        name={'toggle-sharp'}
+
+      />
+      <Text category="label">Abrir/Cerrar</Text>
+    </Pressable>
+  )
+}
 

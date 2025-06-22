@@ -1,14 +1,15 @@
 import { useIsFocused, useNavigation, useNavigationState, useRoute } from '@react-navigation/native';
 import { Divider, Icon, Layout, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components'
-import { useEffect } from 'react';
+import { ReactElement, ReactNode, useEffect } from 'react';
 import { Pressable, TouchableOpacity } from 'react-native';
 
 interface Props {
     title: string;
     subTitle?: string;
 
-    rightAction?: () => void;
-    rightActionIcon?: string;
+    // rightAction?: () => void;
+    // rightActionIcon?: string;
+    renderRightAction?: () => React.ReactElement;
 
     children?: React.ReactNode;
 }
@@ -19,8 +20,7 @@ const TopNavigationLayout = ({
     title,
     subTitle,
     children,
-    rightAction,
-    rightActionIcon
+    renderRightAction,
 }: Props) => {
 
     const {goBack}= useNavigation();
@@ -48,31 +48,34 @@ const TopNavigationLayout = ({
     )
 
 
-    const RenderRightAction = () => {
-        const showOnRoutes = ['FoodStandsScreen'];
-        const shouldShow = showOnRoutes.includes(currentRouteName) && isFocused;
+//     const RenderRightAction = () => {
+//         const showOnRoutes = ['FoodStandsScreen', 'SettingsScreen'];
+//         const shouldShow = showOnRoutes.includes(currentRouteName) && isFocused;
 
-        if (!shouldShow || !rightAction || !rightActionIcon) return null;
+//         if (!shouldShow || !rightAction || !rightActionIcon) return null;
+//         if(currentRouteName === 'FoodStandsScreen'){
 
-        return (
-            <Pressable
-                onPress={rightAction}
-                style={({ pressed }) => ({
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingHorizontal: 10,
-                    opacity: pressed ? 0.5 : 1,
-                })}
-            >
-                <Icon
-                    style={{ width: 24, height: 24 }}
-                    name={rightActionIcon}
+//             return (
+//                 <Pressable
+//                 onPress={rightAction}
+//                 style={({ pressed }) => ({
+//                     alignItems: 'center',
+//                     justifyContent: 'center',
+//                     paddingHorizontal: 10,
+//                     opacity: pressed ? 0.5 : 1,
+//                 })}
+//                 >
+//                 <Icon
+//                     style={{ width: 24, height: 24 }}
+//                     name={rightActionIcon}
                     
-                />
-                <Text category="label">Abrir/Cerrar</Text>
-            </Pressable>
-        );
-    };
+//                     />
+//                 <Text category="label">Abrir/Cerrar</Text>
+//             </Pressable>
+//         );
+
+//     };
+// };
 
 
   return (
@@ -85,7 +88,7 @@ const TopNavigationLayout = ({
             subtitle={subTitle}
             alignment='center'
             accessoryLeft={   !isRootScreen ? renderBackAction: undefined}
-            accessoryRight={() => <RenderRightAction/>}
+            accessoryRight={renderRightAction}
         />
         <Divider/>
 

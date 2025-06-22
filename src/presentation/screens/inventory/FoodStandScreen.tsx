@@ -56,5 +56,3 @@ const FoodStandScreen = ({route}: Props) => {
 export default FoodStandScreen
 
 
-
-

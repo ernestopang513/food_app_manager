@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import MenuItem from '../../components/settings/MenuItem';
 import { useAuthStore } from '../../store/auth/useAuthStore';
 import TopNavigationLayout from '../../layouts/TopNavigationLayout';
+import { Pressable } from 'react-native';
 
 interface optionItem {
   name: string;
@@ -38,28 +39,16 @@ const optionsItemsAction = [
 
 
 const SettingsScreen = () => {
-
-  const { logout} = useAuthStore();
-
- 
   return (
 
     <TopNavigationLayout
       title='Ajustes'
-      
+      renderRightAction={LogOutComponent}
     >
 
     <Layout style={{flex: 1, paddingHorizontal: 20, paddingTop: 10 }}>
       
       <ScrollView>
-
-        {/* <Text 
-          category='h2' 
-          style={{marginBottom: 20}}
-          >
-          Ajustes
-        </Text> */}
-
         {
           optionsItemsAction.map((item, index) => (
             <MenuItem
@@ -70,15 +59,6 @@ const SettingsScreen = () => {
             />
           ))
         }
-
-        <Button 
-          style={{marginTop: 20}}
-          status='danger'
-          onPress={logout}  
-          >
-          LogOut
-        </Button>
-
       </ScrollView>
     </Layout>
           </TopNavigationLayout>
@@ -86,3 +66,28 @@ const SettingsScreen = () => {
   )
 }
 export default SettingsScreen
+
+
+const LogOutComponent = () => {
+  const logout = useAuthStore(state => state.logout);
+  const theme = useTheme();
+  return(
+
+    <Pressable
+      onPress={logout}
+      style={({ pressed }) => ({
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        opacity: pressed ? 0.5 : 1,
+      })}
+    >
+      <Icon
+        style={{ width: 24, height: 24 }}
+        name={'log-out'}
+        color = {theme['color-danger-500']}
+      />
+      <Text category="label">LogOut</Text>
+    </Pressable>
+  )
+}

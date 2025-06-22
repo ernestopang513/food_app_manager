@@ -7,9 +7,15 @@ import FoodStandSettinsScreen from '../../screens/inventory/FoodStandSettingsScr
 import TemporalScreen from '../../screens/develop/TemporalScreen';
 
 
+export type StackParamsSettings = {
+  FoodStandScreen: undefined
+  DishScreen: undefined
+  FoodStandDishes: undefined
+  DeliveryPoint: undefined
+  SettingsScreen: undefined
+}
 
-
-const SettingsStack = createStackNavigator();
+const SettingsStack = createStackNavigator<StackParamsSettings>();
 
 const SettingsStackNavigation = () => {
   return (

@@ -6,23 +6,11 @@ import { FoodStand, Dish } from '../../../domain/entities/foodStand';
 import { DishInfoItem } from "./DishInfoItem";
 
 
-export interface Sucursal {
-  nombre: string;
-  platillo1: number;
-  platillo2: number;
-  platillo3: number;
-}
-
-// interface Props {
-//   sucursal: Sucursal
-// }
-
-type HeaderProp = {
-  sucursal: string
-}
 
 interface Props {
-  foodStand: FoodStand
+  foodStand: FoodStand;
+  onPress?: (foodStandId: string) => void;
+  // handleDisable?: () => void;
 }
 
 
@@ -34,26 +22,34 @@ const Header = ({nombre}: {nombre: string}) => {
   )
 }
 
-export const FoodStandCard = ({foodStand}: Props) => {
-
-  const {navigate} = useNavigation<NavigationProp<StackParamsInventory>>();
+export const FoodStandCard = ({foodStand, onPress}: Props) => {
 
   return (
     <Card
-        onPress={() => navigate('FoodStandScreen', {foodStandId: foodStand.id})}
+        onPress={() => onPress?.(foodStand.id)}
         style = {{marginTop: 20}}
         header={() => <Header nombre={foodStand.name} />}
-        disabled= {foodStand.isOpen? false: true}
+        // disabled= {foodStand.isOpen? false: true}
+        disabled ={ false}
         status={foodStand.isOpen? "success" : "danger"}
     >
-       {foodStand.foodStandDishes.map((fsDish, index) => (
+       {
+       foodStand?.foodStandDishes?.length !== 0 &&  foodStand?.foodStandDishes?.map((fsDish, index) => (
         <DishInfoItem
           key={fsDish.id}
           dishName={fsDish.dish.name}
           quantity={fsDish.quantity}
           level={index % 2 === 0 ? '2' : '1'}
         />
-       ))}
+       ))
+       }
+
+       {
+        foodStand?.foodStandDishes?.length === 0 &&
+        <View>
+          <Text>Sin platillos registrados agregalos en el menu de platillos</Text>
+        </View>
+       }
         
     </Card>
   )

@@ -1,13 +1,11 @@
 import { List } from '@ui-kitten/components';
-import { FoodStandCard } from './FoodStandCard';
-import { FoodStand } from '../../../domain/entities/foodStand';
 import { useCallback, useState } from 'react';
 import { RefreshControl } from 'react-native';
-import { StackParamsInventory } from '../../routes/inventory/StackNavigationInventory';
+import { FoodStand } from '../../../../domain/entities/foodStand';
+import { FoodStandCard } from '../../foodStands/FoodStandCard';
+import { StackParamsSettings } from '../../../routes/settings/SettingsStackNavigation';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-
-
-
+import { StackParamsFdSSettings } from '../../../routes/settings/foodStandNav/FdSettingsStackNav';
 
 
 interface Props {
@@ -19,7 +17,8 @@ const FoodStandsList = ({foodStands, onRefresh}: Props) => {
 
     const [refreshing, setRefreshing] = useState(false);
 
-    const {navigate} = useNavigation<NavigationProp<StackParamsInventory>>();
+      const {navigate} = useNavigation<NavigationProp<StackParamsFdSSettings>>();
+    
 
     const handleRefresh = useCallback(async () => {
         setRefreshing(true);
@@ -36,10 +35,10 @@ const FoodStandsList = ({foodStands, onRefresh}: Props) => {
         keyExtractor={(item, index) => `${item.name}-${index}`}
 
         renderItem={({item}) => 
-        <FoodStandCard 
-        foodStand = {item}
-        onPress={(foodStandId) => navigate('FoodStandScreen', {foodStandId})}
-        />}
+                    <FoodStandCard
+                        foodStand = {item}
+                        onPress={(foodStandId) => navigate('FoodStand', {foodStandId})}
+                    />}
 
         refreshControl={
             <RefreshControl  refreshing={refreshing} onRefresh={handleRefresh}    />

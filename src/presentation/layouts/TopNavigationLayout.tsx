@@ -31,7 +31,7 @@ const TopNavigationLayout = ({
     const route = useRoute();
     const currentRouteName = route.name;
   
-
+    const InvalidsRoutes = ['SettingsScreen', 'FoodStandsScreen']
     const isFocused = useIsFocused();
 
     useEffect(() => {
@@ -48,36 +48,6 @@ const TopNavigationLayout = ({
     )
 
 
-//     const RenderRightAction = () => {
-//         const showOnRoutes = ['FoodStandsScreen', 'SettingsScreen'];
-//         const shouldShow = showOnRoutes.includes(currentRouteName) && isFocused;
-
-//         if (!shouldShow || !rightAction || !rightActionIcon) return null;
-//         if(currentRouteName === 'FoodStandsScreen'){
-
-//             return (
-//                 <Pressable
-//                 onPress={rightAction}
-//                 style={({ pressed }) => ({
-//                     alignItems: 'center',
-//                     justifyContent: 'center',
-//                     paddingHorizontal: 10,
-//                     opacity: pressed ? 0.5 : 1,
-//                 })}
-//                 >
-//                 <Icon
-//                     style={{ width: 24, height: 24 }}
-//                     name={rightActionIcon}
-                    
-//                     />
-//                 <Text category="label">Abrir/Cerrar</Text>
-//             </Pressable>
-//         );
-
-//     };
-// };
-
-
   return (
     <Layout style={{flex: 1}}>
         <TopNavigation
@@ -87,7 +57,8 @@ const TopNavigationLayout = ({
             )}
             subtitle={subTitle}
             alignment='center'
-            accessoryLeft={   !isRootScreen ? renderBackAction: undefined}
+            // accessoryLeft={   (currentRouteName !== 'SettingsScreen' && currentRouteName!== 'FoodStandsScreen') ? renderBackAction : undefined}
+            accessoryLeft={   (!InvalidsRoutes.includes(currentRouteName)) ? renderBackAction : undefined}
             accessoryRight={renderRightAction}
         />
         <Divider/>

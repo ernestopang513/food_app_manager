@@ -2,13 +2,14 @@
 import { Icon,  Layout, useTheme } from '@ui-kitten/components';
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import Separator from './Separator';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { StackParamsSettings } from '../../routes/settings/SettingsStackNavigation';
 
 
 interface Props {
     name: string;
     icon: string;
-    component: string;
+    component: keyof StackParamsSettings;
     isFirst?: boolean;
     isLast?: boolean;
 }
@@ -16,7 +17,7 @@ interface Props {
 const MenuItem = ({name, icon, component, isFirst = false , isLast = false} : Props) => {
 
     const theme = useTheme();
-    const navigator = useNavigation<any>();
+    const navigator = useNavigation<NavigationProp<StackParamsSettings>>();
 
   return (
     <>

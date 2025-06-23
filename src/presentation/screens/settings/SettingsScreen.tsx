@@ -4,15 +4,16 @@ import MenuItem from '../../components/settings/MenuItem';
 import { useAuthStore } from '../../store/auth/useAuthStore';
 import TopNavigationLayout from '../../layouts/TopNavigationLayout';
 import { Pressable } from 'react-native';
+import { StackParamsSettings } from '../../routes/settings/SettingsStackNavigation';
 
 interface optionItem {
   name: string;
-  rightIcon: string;
-  leftIcon: string;
+  icon: string;
+  component: keyof StackParamsSettings;
 }
 
 
-const optionsItemsAction = [
+const optionsItemsAction: optionItem[] = [
   {
     name: 'Locales',
     icon: 'storefront-outline',
@@ -21,17 +22,17 @@ const optionsItemsAction = [
   {
     name: 'Platillos',
     icon: 'fast-food-outline',
-    component: 'FoodStandScreen',
+    component: 'DishScreen',
   },
   {
     name: 'Menu de platillos',
     icon: 'restaurant-outline',
-    component: 'FoodStandScreen',
+    component: 'FoodStandDishes',
   },
   {
     name: 'Punto de entrega',
     icon: 'location-outline',
-    component: 'FoodStandScreen',
+    component: 'DeliveryPoint',
   },
   
 ]
@@ -83,7 +84,7 @@ const LogOutComponent = () => {
       })}
     >
       <Icon
-        style={{ width: 24, height: 24 }}
+        style={{height: 24 }}
         name={'log-out'}
         color = {theme['color-danger-500']}
       />

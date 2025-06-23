@@ -24,6 +24,15 @@ export class FoodStandMapper {
         }
     }
 
+    static foodStandResponseSettings (foodStandResponse: FoodStandResponse): Partial<FoodStand> {
+        return {
+            name: foodStandResponse.name,
+            location: foodStandResponse.location,
+            latitude: foodStandResponse.latitude,
+            longitude: foodStandResponse.longitude,
+        }
+    }
+
     static foodStandPatchResToOpenEntity(foodStandPatchRes: FoodStandPatchResponse): Partial<FoodStand> {
 
         return {

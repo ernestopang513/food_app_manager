@@ -27,8 +27,8 @@ const DishQuantityController = ({foodStand, onRefresh}: Props) => {
     }
   }, [onRefresh])
 
-  const sortedDishes = [...foodStand.foodStandDishes]
-    .sort((a,b) => a.dish.name.localeCompare(b.dish.name));
+  // const sortedDishes = [...foodStand.foodStandDishes]
+  //   .sort((a,b) => a.dish.name.localeCompare(b.dish.name));
  
     return (
     <ScrollView
@@ -43,7 +43,7 @@ const DishQuantityController = ({foodStand, onRefresh}: Props) => {
     >
 
       {
-        sortedDishes.map((item) => (
+        foodStand?.foodStandDishes?.map((item) => (
           <DishCardForm foodStandDishId={item.id} key={item.id} />
         ))
       }

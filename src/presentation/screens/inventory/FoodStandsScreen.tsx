@@ -61,7 +61,7 @@ const FoodStandsScreen = ({navigation}: Props) => {
       >
         
         {
-          ( foodStands === undefined || (foodStands.length === 0) )
+          ( !foodStands || (foodStands.length === 0) )
           ? <NoticeScreen title='Sin locales' message='Ve a crear locales! Pista: estan en ajustes' />
           : <FoodStandsList foodStands={foodStands} onRefresh={() => refetch().then(() => { })} />
         }
@@ -87,7 +87,7 @@ const OpenClose = () => {
       })}
     >
       <Icon
-        style={{ width: 24, height: 24 }}
+        style={{height: 24 }}
         name={'toggle-sharp'}
 
       />

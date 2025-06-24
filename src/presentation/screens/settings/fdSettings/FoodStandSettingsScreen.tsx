@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, ScrollView, Pressable } from 'react-native'
 import TopNavigationLayout from '../../../layouts/TopNavigationLayout'
 import { StackScreenProps } from '@react-navigation/stack'
 import { StackParamsFdSSettings } from '../../../routes/settings/foodStandNav/FdSettingsStackNav'
@@ -7,13 +7,14 @@ import { useRef } from 'react'
 import { getFoodStandById, getFoodStandByIdNoDishes } from '../../../../actions/foodStands/get-foodStand-by-id';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import SkeletonCard from '../../../components/ui/SkeletonCard';
-import { Button, Input, Layout } from '@ui-kitten/components'
-import Icon from '@react-native-vector-icons/ionicons'
+import { Button, Icon, Input, Layout, Text, useTheme } from '@ui-kitten/components'
 import { Formik } from 'formik'
 import ErrorScreen from '../../../components/ui/ErrorScreen'
 import { FoodStandSchema } from './validations'
 import { updateCreateFoodStand } from '../../../../actions/foodStands/update-create-foodStand'
 import { log } from '../../../../config/loggers/logger'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { deleteFoodStandById } from '../../../../actions/foodStands/delete-foodStand-by-id'
 
 const emptyFoodStand: Partial<FoodStand> = {
     name: 'Nuevo Local',
@@ -22,29 +23,41 @@ const emptyFoodStand: Partial<FoodStand> = {
     longitude: 0,
 }
 
-const FoodStandSettingsScreen = ({route}:StackScreenProps<StackParamsFdSSettings, 'FoodStand'>) => {
+const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParamsFdSSettings, 'FoodStand'>) => {
 
-  const foodStandId = useRef(route.params.foodStandId)
+  const foodStandIdRef = useRef(route.params.foodStandId)
   const queryClient = useQueryClient();
 
-  const isNew = foodStandId.current === 'new'
+  const isNew = foodStandIdRef.current === 'new'
   
   const {data: foodStand, isLoading, isError, error} = useQuery({
-    queryKey: ['foodStand', foodStandId.current, 'settings'],
-    queryFn: () => getFoodStandByIdNoDishes(foodStandId.current),
+    queryKey: ['foodStand', foodStandIdRef.current, 'settings'],
+    queryFn: () => getFoodStandByIdNoDishes(foodStandIdRef.current),
     enabled: !isNew
   })
   
   const finalFoodStand = isNew? emptyFoodStand : (foodStand ?? emptyFoodStand)
   
-
+  log(finalFoodStand.id, 'linea 41')
   const mutation = useMutation({
     mutationFn: (data: Partial<FoodStand>) => updateCreateFoodStand({...data, id: finalFoodStand.id}),
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['foodStand', foodStandId.current, 'settings']})
+    onSuccess: (data: FoodStand) => {
+      foodStandIdRef.current = data.id;
+      queryClient.invalidateQueries({queryKey: ['foodStand', foodStandIdRef.current, 'settings']})
       queryClient.invalidateQueries({queryKey: ['foodStandsSettings']})
       log('Success')
     }
+  })
+  const DeleteMutation = useMutation({
+    mutationFn: () => {
+      if(finalFoodStand.id === undefined) throw new Error('Faltan parametros')
+      return deleteFoodStandById(finalFoodStand.id)},
+    onSuccess: () => {
+      // queryClient.invalidateQueries({queryKey: ['foodStand', foodStandIdRef.current, 'settings']})
+      queryClient.invalidateQueries({queryKey: ['foodStandsSettings']})
+      log('Success')
+    },
+    onSettled: () => navigation.goBack(),
   })
   
   if(isLoading) {
@@ -81,10 +94,12 @@ const FoodStandSettingsScreen = ({route}:StackScreenProps<StackParamsFdSSettings
       }}
     >
       {
-        ({handleChange, handleSubmit, values, setFieldTouched, touched, errors}) => (
+        ({handleChange, handleSubmit, values, touched, errors}) => (
 
         <TopNavigationLayout
-          title={finalFoodStand?.name ?? ''}
+          // title={finalFoodStand?.name ?? ''}
+          title={values.name ?? ''}
+          renderRightAction={isNew ? undefined : () => <Delete deleteFunction={DeleteMutation.mutate}/>}
         >
           <Layout
             style={{ marginHorizontal: 20, flex: 1 }}
@@ -134,6 +149,7 @@ const FoodStandSettingsScreen = ({route}:StackScreenProps<StackParamsFdSSettings
               <Button
                 accessoryLeft={() => <Icon name='save-outline' color={'white'} size={35} />}
                 style={{ marginTop: 20 }}
+                disabled = {mutation.isPending}
                 onPress={() => handleSubmit()}
               >
                 Guardar
@@ -153,3 +169,28 @@ const FoodStandSettingsScreen = ({route}:StackScreenProps<StackParamsFdSSettings
   )
 }
 export default FoodStandSettingsScreen
+
+const Delete = ({deleteFunction}:{ deleteFunction: () => void}) => {
+  const theme = useTheme();
+  return(
+
+    <Pressable
+      onLongPress={() => deleteFunction()}
+    //   onPress={() => {}}
+      style={({ pressed }) => ({
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        opacity: pressed ? 0.5 : 1,
+      })}
+    >
+      <Icon
+        style={{ height: 24 }}
+        name={'trash'}
+        color ={theme['color-danger-500']}
+
+      />
+      {/* <Text appearance='hint' category="label">Eliminar</Text> */}
+    </Pressable>
+  )
+}

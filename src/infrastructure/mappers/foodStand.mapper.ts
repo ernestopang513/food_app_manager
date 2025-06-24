@@ -26,6 +26,7 @@ export class FoodStandMapper {
 
     static foodStandResponseSettings (foodStandResponse: FoodStandResponse): Partial<FoodStand> {
         return {
+            id: foodStandResponse.id,
             name: foodStandResponse.name,
             location: foodStandResponse.location,
             latitude: foodStandResponse.latitude,

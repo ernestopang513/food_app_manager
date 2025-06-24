@@ -53,7 +53,7 @@ const TopNavigationLayout = ({
         <TopNavigation
             // title={title}
             title={() => (
-                <Text category='h4'>{title}</Text>
+                <Text category='h5'>{title}</Text>
             )}
             subtitle={subTitle}
             alignment='center'

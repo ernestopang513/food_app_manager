@@ -26,6 +26,8 @@ const CustomModal: React.FC<Props> = ({
       visible={visible}
       backdropStyle={styles.backdrop}
       onBackdropPress={!disabled ? onClose : undefined}
+      animationType='fade'
+      
     >
       <Card disabled={true}>
         <Layout style={styles.content}>
@@ -43,8 +45,8 @@ const CustomModal: React.FC<Props> = ({
 
           {children}
 
-          {onClose && !children && (
-            <Button onPress={onClose} disabled={disabled}>
+          {onClose && (
+            <Button onPress={onClose} disabled={disabled} status='danger' >
               Cerrar
             </Button>
           )}

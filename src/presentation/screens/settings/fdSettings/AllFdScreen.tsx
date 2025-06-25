@@ -15,6 +15,7 @@ const AllFdScreen = () => {
     const { data: foodStands, isLoading, isError, error, refetch } = useQuery({
         queryKey: ['foodStandsSettings'],
         queryFn: getAllFoodStands,
+        // staleTime: 1000 * 60,
         staleTime: 0,
     })
 

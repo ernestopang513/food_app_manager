@@ -1,10 +1,10 @@
-import { View, ScrollView, Pressable } from 'react-native'
+import { ScrollView, Pressable } from 'react-native'
 import TopNavigationLayout from '../../../layouts/TopNavigationLayout'
 import { StackScreenProps } from '@react-navigation/stack'
 import { StackParamsFdSSettings } from '../../../routes/settings/foodStandNav/FdSettingsStackNav'
 import { FoodStand } from '../../../../domain/entities/foodStand'
-import { useRef } from 'react'
-import { getFoodStandById, getFoodStandByIdNoDishes } from '../../../../actions/foodStands/get-foodStand-by-id';
+import { useRef, useState } from 'react'
+import { getFoodStandByIdNoDishes } from '../../../../actions/foodStands/get-foodStand-by-id';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import SkeletonCard from '../../../components/ui/SkeletonCard';
 import { Button, Icon, Input, Layout, Text, useTheme } from '@ui-kitten/components'
@@ -13,8 +13,10 @@ import ErrorScreen from '../../../components/ui/ErrorScreen'
 import { FoodStandSchema } from './validations'
 import { updateCreateFoodStand } from '../../../../actions/foodStands/update-create-foodStand'
 import { log } from '../../../../config/loggers/logger'
-import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { deleteFoodStandById } from '../../../../actions/foodStands/delete-foodStand-by-id'
+import { useUIStore } from '../../../store/ui/useUIStore'
+import ConfirmationModal from '../../../components/ui/ConfirmationModal'
+import NativeCustomModal from '../../../components/ui/NativeCustomModal'
 
 const emptyFoodStand: Partial<FoodStand> = {
     name: 'Nuevo Local',
@@ -27,6 +29,11 @@ const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParam
 
   const foodStandIdRef = useRef(route.params.foodStandId)
   const queryClient = useQueryClient();
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+  const mutationError = useUIStore(state => state.mutationError);
+  const setMutationError = useUIStore(state => state.setMutationError);
 
   const isNew = foodStandIdRef.current === 'new'
   
@@ -45,19 +52,26 @@ const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParam
       foodStandIdRef.current = data.id;
       queryClient.invalidateQueries({queryKey: ['foodStand', foodStandIdRef.current, 'settings']})
       queryClient.invalidateQueries({queryKey: ['foodStandsSettings']})
-      log('Success')
+    },
+    onError: (error) => {
+      setMutationError(error.message ?? 'Error inesperado')
     }
   })
+
   const DeleteMutation = useMutation({
     mutationFn: () => {
       if(finalFoodStand.id === undefined) throw new Error('Faltan parametros')
       return deleteFoodStandById(finalFoodStand.id)},
     onSuccess: () => {
-      // queryClient.invalidateQueries({queryKey: ['foodStand', foodStandIdRef.current, 'settings']})
       queryClient.invalidateQueries({queryKey: ['foodStandsSettings']})
       log('Success')
+      setShowDeleteConfirm(false);
+      navigation.goBack();
     },
-    onSettled: () => navigation.goBack(),
+    onError: (error) => {
+      setShowDeleteConfirm(false);
+      setMutationError(error.message ?? 'Error inesperado');
+    } ,
   })
   
   if(isLoading) {
@@ -99,7 +113,7 @@ const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParam
         <TopNavigationLayout
           // title={finalFoodStand?.name ?? ''}
           title={values.name ?? ''}
-          renderRightAction={isNew ? undefined : () => <Delete deleteFunction={DeleteMutation.mutate}/>}
+          renderRightAction={isNew ? undefined : () => <Delete deleteFunction={setShowDeleteConfirm}/>}
         >
           <Layout
             style={{ marginHorizontal: 20, flex: 1 }}
@@ -108,6 +122,7 @@ const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParam
             
             <ScrollView
               showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps='handled'
             >
 
               <Layout>
@@ -160,6 +175,26 @@ const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParam
 
           </Layout>
 
+          <NativeCustomModal
+            visible = {!!mutationError}
+            title='Error'
+            message={mutationError}
+            loading = {mutation.isPending}
+            disabled = {mutation.isPending}
+            disabledBackdrop = {false}
+            onClose={() => {
+              setMutationError(undefined);
+            }}
+          />
+
+          {
+            showDeleteConfirm &&
+            <ConfirmationModal
+              onAccepted={() => DeleteMutation.mutate()}
+              onCancel={() => {setShowDeleteConfirm(false)}}
+            />
+
+          }
 
         </TopNavigationLayout>
         )
@@ -170,12 +205,12 @@ const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParam
 }
 export default FoodStandSettingsScreen
 
-const Delete = ({deleteFunction}:{ deleteFunction: () => void}) => {
+const Delete = ({deleteFunction}:{ deleteFunction: (state: boolean) => void}) => {
   const theme = useTheme();
   return(
 
     <Pressable
-      onLongPress={() => deleteFunction()}
+      onLongPress={() => deleteFunction?.(true)}
     //   onPress={() => {}}
       style={({ pressed }) => ({
         alignItems: 'center',

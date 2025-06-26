@@ -6,6 +6,7 @@ import { FoodStandCard } from '../../foodStands/FoodStandCard';
 import { StackParamsSettings } from '../../../routes/settings/SettingsStackNavigation';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { StackParamsFdSSettings } from '../../../routes/settings/foodStandNav/FdSettingsStackNav';
+import NativeFoodStandCard from '../../foodStands/NativeFoodStandCard';
 
 
 interface Props {
@@ -35,7 +36,7 @@ const FoodStandsList = ({foodStands, onRefresh}: Props) => {
         keyExtractor={(item, index) => `${item.name}-${index}`}
 
         renderItem={({item}) => 
-                    <FoodStandCard
+                    <NativeFoodStandCard
                         foodStand = {item}
                         onPress={(foodStandId) => navigate('FoodStand', {foodStandId})}
                     />}

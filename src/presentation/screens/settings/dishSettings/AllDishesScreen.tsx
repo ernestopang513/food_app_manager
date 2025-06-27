@@ -1,29 +1,35 @@
 import { useQuery } from '@tanstack/react-query'
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, Pressable } from 'react-native'
 import { getAllDishes } from '../../../../actions/dishes/get-all-dishes'
-import { Layout, TopNavigation } from '@ui-kitten/components'
+import { Icon, Layout, TopNavigation } from '@ui-kitten/components'
 import TopNavigationLayout from '../../../layouts/TopNavigationLayout'
 import ErrorScreen from '../../../components/ui/ErrorScreen'
 import NoticeScreen from '../../../components/ui/NoticeScreen'
 import SkeletonCard from '../../../components/ui/SkeletonCard'
-import { DishInfoItem } from '../../../components/foodStands/DishInfoItem'
 import DishCard from '../../../components/settings/dishSettings/DishCard'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { StackParamsDishSettings } from '../../../routes/settings/dishNav/DishSettingsStackNav'
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack'
 
 
 
+interface Props extends StackScreenProps<StackParamsDishSettings, 'AllDishes'> {}
 
-
-const AllDishesScreen = () => {
+const AllDishesScreen = ({navigation : {navigate}}: Props) => {
     
     const {data: dishes, isLoading, isError, error} = useQuery({
         queryKey: ['AllDishesSettings'],
         queryFn: getAllDishes
     })
 
+    // const {navigate} = useNavigation<StackNavigationProp<StackParamsDishSettings>>();
+
+
   return (
     <TopNavigationLayout 
     title='Platilos'
     subTitle='Edición'
+    renderRightAction={Add}
     >
         <Layout
             style = {{paddingHorizontal: 20, flex: 1}}
@@ -46,7 +52,7 @@ const AllDishesScreen = () => {
                 <FlatList
                     data={dishes}
                     keyExtractor={(item) => `${item.id}`}
-                    renderItem={({item}) => <DishCard dish = {item} />}
+                    renderItem={({item}) => <DishCard dish = {item} onPress={() => navigate('Dish', {dishId: item.id})} />}
                 />
             }
 
@@ -55,3 +61,29 @@ const AllDishesScreen = () => {
   )
 }
 export default AllDishesScreen
+
+
+
+export const Add = () => {
+  const navigation = useNavigation<NavigationProp<StackParamsDishSettings>>();
+  return(
+
+    <Pressable
+      onPress={() => navigation.navigate('Dish', {dishId: 'new'})}
+    //   onPress={() => {}}
+      style={({ pressed }) => ({
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        opacity: pressed ? 0.5 : 1,
+      })}
+    >
+      <Icon
+        style={{ height: 34 }}
+        name={'add'}
+
+      />
+      {/* <Text category="label"></Text> */}
+    </Pressable>
+  )
+}

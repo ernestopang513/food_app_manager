@@ -10,7 +10,7 @@ import SkeletonCard from '../../../components/ui/SkeletonCard';
 import { Button, Icon, Input, Layout, Text, useTheme } from '@ui-kitten/components'
 import { Formik } from 'formik'
 import ErrorScreen from '../../../components/ui/ErrorScreen'
-import { FoodStandSchema } from './validations'
+import { FoodStandSchema } from '../validations'
 import { updateCreateFoodStand } from '../../../../actions/foodStands/update-create-foodStand'
 import { log } from '../../../../config/loggers/logger'
 import { deleteFoodStandById } from '../../../../actions/foodStands/delete-foodStand-by-id'
@@ -150,6 +150,7 @@ const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParam
                   style={{ marginVertical: 5 }}
                   status={touched.latitude && errors.latitude ? 'danger' : 'basic'}
                   caption={touched.latitude && errors.latitude}
+                  keyboardType='numeric'
                 />
                 <Input
                   label={"Longitud"}
@@ -158,6 +159,7 @@ const FoodStandSettingsScreen = ({route, navigation}:StackScreenProps<StackParam
                   style={{ marginVertical: 5 }}
                   status={touched.longitude && errors.longitude ? 'danger' : 'basic'}
                   caption={touched.longitude && errors.longitude}
+                  keyboardType='numeric'
                 />
               </Layout>
 

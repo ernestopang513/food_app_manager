@@ -1,15 +1,15 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { View, Text, Pressable, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { Dish } from '../../../../domain/entities/foodStand'
 import CustomText from '../../ui/CustomText';
 import { useTheme } from '@ui-kitten/components';
 
 interface Props {
     dish: Dish;
-    onPress?: (dishId: string) => void;
+    onPress?: () => void;
 }
 
-const Header = ({nombre}: {nombre: string}) =>( 
-    <View style = {style.header}>
+export const NativeCardHeader = ({nombre, haederStyle}: {nombre: string, haederStyle?: StyleProp<ViewStyle>}) =>( 
+    <View style = {[style.header, haederStyle]}>
         <CustomText category='h4' style = { style.headerText} >{nombre}</CustomText>
     </View>)
 
@@ -18,13 +18,13 @@ const DishCard = ({dish, onPress}: Props) => {
     const theme = useTheme();
   return (
     <Pressable
-        onPress={() => {}}
+        onPress={() => {onPress?.()}}
         style = {({pressed}) => [
             {opacity: pressed? 0.5: 1},
             style.card
         ]}
     >
-          <Header nombre={dish.name} />
+          <NativeCardHeader nombre={dish.name} />
           {/* <View style = {{padding: 10}}> */}
               <View style={style.infoText}>
                   <Text>Nombre:</Text>

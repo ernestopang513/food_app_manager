@@ -10,6 +10,8 @@ import Icon from '@react-native-vector-icons/ionicons';
 import { Text } from '@ui-kitten/components';
 import DishSettingsStackNav from './dishNav/DishSettingsStackNav';
 import DeliveryPStackNav from './deliveryPointNav/DeliveryPStackNav';
+import Prueba from '../../screens/settings/fdDish/prueba';
+import FdDishSettisgStackNav from './foodStandDishNav/fdDishSettisgStackNav';
 
 
 export type StackParamsSettings = {
@@ -33,7 +35,7 @@ const SettingsStackNavigation = () => {
     >
       <SettingsStack.Screen name='FoodStandScreen' component={FdSettingsStackNav} />
       <SettingsStack.Screen name='DishScreen' component={DishSettingsStackNav} />
-      <SettingsStack.Screen name='FoodStandDishes' component={TemporalScreen} />
+      <SettingsStack.Screen name='FoodStandDishes' component={FdDishSettisgStackNav} />
       <SettingsStack.Screen name='DeliveryPoint' component={DeliveryPStackNav} />
       <SettingsStack.Screen
         name='SettingsScreen'

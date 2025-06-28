@@ -1,16 +1,20 @@
-import { Icon, Layout, Text } from '@ui-kitten/components'
-import { Pressable } from 'react-native'
-import TopNavigationLayout from '../../../layouts/TopNavigationLayout'
-import { useQuery } from '@tanstack/react-query'
-import { getAllFoodStandsWithDishes } from '../../../../actions/foodStands/get-all-foodStand'
+
+
+
+
+import { View, Text, FlatList, Pressable } from 'react-native'
 import { getAllFoodStands } from '../../../../actions/settings/get-all-foodStand.settings'
-import { log } from '../../../../config/loggers/logger'
-import { StackParamsFdSSettings } from '../../../routes/settings/foodStandNav/FdSettingsStackNav'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
-import NoticeScreen from '../../../components/ui/NoticeScreen'
+import { useQuery } from '@tanstack/react-query'
+import { Icon, Layout } from '@ui-kitten/components'
+import FoodStandsList from '../../../components/foodStands/FoodStandsList'
 import ErrorScreen from '../../../components/ui/ErrorScreen'
-import FoodStandsList from '../../../components/settings/foodStandSettings/FoodStandList.settings'
-const AllFdScreen = () => {
+import NoticeScreen from '../../../components/ui/NoticeScreen'
+import TopNavigationLayout from '../../../layouts/TopNavigationLayout'
+import FoodStandDishCard from '../../../components/settings/foodStandDishSettings/FoodStandDishCard'
+import { useState } from 'react'
+const FoodStandDishScreen = () => {
+
+    const [refreshing, setRefreshing] = useState(false);
 
     const { data: foodStands, isLoading, isError, error, refetch } = useQuery({
         queryKey: ['foodStandsSettings'],
@@ -20,9 +24,9 @@ const AllFdScreen = () => {
     })
 
 
-  return (
+   return (
     <TopNavigationLayout
-        title='Locales'
+        title='Menú'
         subTitle='Edición'
         renderRightAction={Add}
     >
@@ -42,20 +46,25 @@ const AllFdScreen = () => {
 
         {
           !isLoading && !isError && !!foodStands && foodStands.length !== 0 &&
-          <FoodStandsList foodStands={foodStands} onRefresh={() => refetch().then(() => { })} />
+            <FlatList
+                data = {foodStands}
+                keyExtractor={(item) => `${item.id}`}
+                renderItem={({item}) => <FoodStandDishCard foodStand={item}  /> }
+                refreshing = {refreshing}
+                onRefresh={refetch}
+            />
         }
         </Layout>
     </TopNavigationLayout>
   )
 }
-export default AllFdScreen
+export default FoodStandDishScreen
 
-export const Add = () => {
-  const navigation = useNavigation<NavigationProp<StackParamsFdSSettings>>();
+const Add = () => {
   return(
 
     <Pressable
-      onPress={() => navigation.navigate('FoodStand', {foodStandId: 'new'})}
+      onPress={() => []}
     //   onPress={() => {}}
       style={({ pressed }) => ({
         alignItems: 'center',

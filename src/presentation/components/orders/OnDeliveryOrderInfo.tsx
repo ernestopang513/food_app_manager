@@ -69,7 +69,8 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
       setIconName('close-circle-outline');
       setBackgroundColor('#c0392b');
       handleOrderStatus();
-    }
+    },
+    onSettled: () => {}
   })
   const returnOrder = useMutation({
     mutationFn: () => {
@@ -77,7 +78,7 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
       return updateOrderStatus(orderId, deliveryUserId, OrderStatus.PENDIENTE)
     },
     onSuccess: () => {
-      setLabel('Order entregada');
+      setLabel('Se regresó la orden');
       setIconName('checkmark-circle-outline');
       setBackgroundColor('#50c878');
       handleOrderStatus();
@@ -96,7 +97,7 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
       return cancelOrderDeliverUser(orderId);
     },
     onSuccess: () => {
-      setLabel('Order entregada');
+      setLabel('Orden cancelada');
       setIconName('checkmark-circle-outline');
       setBackgroundColor('#50c878');
       handleOrderStatus();
@@ -181,7 +182,7 @@ const Footer = ({completeOrder, returnOrder, cancelOrder}: FooterProps) => (
     <Button
     size='small'
       status='warning'
-      onPress={returnOrder}
+      onLongPress={returnOrder}
       >
       Regresar
     </Button>

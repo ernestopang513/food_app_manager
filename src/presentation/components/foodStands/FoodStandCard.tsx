@@ -34,14 +34,16 @@ export const FoodStandCard = ({foodStand, onPress}: Props) => {
         status={foodStand.isOpen? "success" : "danger"}
     >
        {
-       foodStand?.foodStandDishes?.length !== 0 &&  foodStand?.foodStandDishes?.map((fsDish, index) => (
+       foodStand?.foodStandDishes?.length !== 0 &&  foodStand?.foodStandDishes?.map((fsDish, index) =>{ 
+        if(fsDish.is_active === false) return
+        return (
         <DishInfoItem
           key={fsDish.id}
           dishName={fsDish.dish.name}
           quantity={fsDish.quantity}
           level={index % 2 === 0 ? '2' : '1'}
         />
-       ))
+       )})
        }
 
        {

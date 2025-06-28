@@ -12,16 +12,19 @@ import AnimatedCardWrapper from '../../../components/ui/animations/AnimatedCardW
 import SkeletonCard from '../../../components/ui/SkeletonCard';
 import ErrorScreen from '../../../components/ui/ErrorScreen';
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFabStore } from '../../../store/orders/useFabStore';
+import { log } from '../../../../config/loggers/logger';
 
 interface Props extends StackScreenProps<StackParamsOnRoute, 'DeliveryScreen'>{}
 
-const DeliveryPointOnRouteScreen = ({route}: Props) => {
+const DeliveryPointOnRouteScreen = ({route, navigation}: Props) => {
 
   const {deliveryPointId, dpName} = route.params;
 
-  const [showFab, setShowFab] = useState(false)
+  const [showFab, setShowFab] = useState(false);///////////
+
+  const hasLoadedOnce = useRef(false);
 
   const foodStandId = useOrderStore(state => state.foodStandId);
   const userId = useAuthStore(state => state.user?.id);
@@ -32,7 +35,7 @@ const DeliveryPointOnRouteScreen = ({route}: Props) => {
 
   const handleOrderStatus = () => {
     setShowFab(true);
-
+    // refetch();////////////////////
     setTimeout(()=>{
       setShowFab(false);
     }, 1500)
@@ -45,7 +48,7 @@ const DeliveryPointOnRouteScreen = ({route}: Props) => {
     deliveryPointId
   }: {foodStandId:string, userId:string, deliveryPointId:string}) => getOnRouteOrders(foodStandId,userId,deliveryPointId);  
   
-  const {data: onRouteOrders, isLoading, isError, error, refetch} = useOrderInfo({
+  const {data: onRouteOrders, isLoading, isError, error, refetch, isSuccess} = useOrderInfo({
     queryKey: 'OrdersForDelivery', 
     deliveryPointId, 
     userId,
@@ -58,6 +61,12 @@ const DeliveryPointOnRouteScreen = ({route}: Props) => {
                 refetch();
             }, [refetch])
         );
+
+//   useEffect(() => {
+//   if (isSuccess && onRouteOrders && onRouteOrders.length === 0) {
+//     navigation.goBack();
+//   }
+// }, [isSuccess, onRouteOrders, navigation]);
   
   return (
     <>
@@ -88,6 +97,7 @@ const DeliveryPointOnRouteScreen = ({route}: Props) => {
             onRouteOrders && onRouteOrders?.length === 0 && !isLoading && !isError
             && <View>
               <Text status='warning' category='h5' style={{textAlign: 'center'}}>Nada que repartir</Text>
+              {/* <Icon name=''  /> */}
             </View> 
           }
 

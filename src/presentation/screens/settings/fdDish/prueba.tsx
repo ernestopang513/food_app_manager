@@ -21,7 +21,7 @@ type MenuItem = {
   dish: string;
 };
 
-const App = () => {
+const Prueba = () => {
   const [selectedStand, setSelectedStand] = useState<FoodStand | null>(null);
   const [selectedDish, setSelectedDish] = useState<string | null>(null);
   const [menu, setMenu] = useState<MenuItem[]>([]);
@@ -58,6 +58,7 @@ const App = () => {
       <FlatList
         data={foodStands}
         keyExtractor={(item, index) => `${item.id}-${index}`}
+        style = {{borderWidth: 5}}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.standButton}
@@ -114,7 +115,7 @@ const App = () => {
   );
 };
 
-export default App;
+export default Prueba;
 
 const styles = StyleSheet.create({
   container: {

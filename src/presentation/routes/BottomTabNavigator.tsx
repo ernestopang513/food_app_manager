@@ -127,7 +127,7 @@ const BottomTabNavigator = () => {
 
   const theme = useTheme()
   return (
-    <View style={styles.container}>
+    // <View style={styles.container}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
@@ -160,6 +160,7 @@ const BottomTabNavigator = () => {
             height: 60,
             paddingBottom: Platform.OS === 'ios' ? 20 : 8,
             // paddingTop: 8,
+            // padding: 10,
           },
           tabBarLabelStyle: {
             fontSize: 12,
@@ -174,7 +175,7 @@ const BottomTabNavigator = () => {
         <Tab.Screen name="Pedidos" component={OrderStackNavigation} />
         <Tab.Screen name="Ajustes" component={SettingsStackNavigation} />
       </Tab.Navigator>
-    </View>
+    // </View>
   );
 };
 

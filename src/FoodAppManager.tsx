@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import * as eva from '@eva-design/eva';
-import { Platform, StatusBar, UIManager } from 'react-native';
+import { Platform, SafeAreaView, StatusBar, UIManager } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { IonIconsPack } from './config/adapters/IconAdapter';
 
@@ -24,12 +24,15 @@ const FoodAppManager = () => {
         theme={eva.light}
       >
         <SafeAreaProvider>
+          {/* <SafeAreaView style = {{flex: 1}} > */}
           <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+
           <NavigationContainer>
             <AuthProvider>
               <RootStackNavigation/>
             </AuthProvider>
           </NavigationContainer>
+          {/* </SafeAreaView> */}
         </SafeAreaProvider>
       </ApplicationProvider>
     </QueryClientProvider>

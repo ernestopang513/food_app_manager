@@ -6,6 +6,7 @@ import { useTheme } from '@ui-kitten/components';
 interface Props {
     dish: Dish;
     onPress?: () => void;
+    styleProp?: StyleProp<ViewStyle>
 }
 
 export const NativeCardHeader = ({nombre, haederStyle}: {nombre: string, haederStyle?: StyleProp<ViewStyle>}) =>( 
@@ -14,14 +15,15 @@ export const NativeCardHeader = ({nombre, haederStyle}: {nombre: string, haederS
     </View>)
 
 
-const DishCard = ({dish, onPress}: Props) => {
+const DishCard = ({dish, onPress,styleProp}: Props) => {
     const theme = useTheme();
   return (
     <Pressable
         onPress={() => {onPress?.()}}
         style = {({pressed}) => [
             {opacity: pressed? 0.5: 1},
-            style.card
+            style.card,
+            styleProp,
         ]}
     >
           <NativeCardHeader nombre={dish.name} />

@@ -10,11 +10,12 @@ export type StackParamsFoodStandDish = {
     
 }
 
-const FoodStandDishSettingsStack = createStackNavigator();
+const FoodStandDishSettingsStack = createStackNavigator<StackParamsFoodStandDish>();
 
 
 import { fadeAnimation } from "../../shared/fade_animation";
-import FoodStandDishScreen from "../../../screens/settings/fdDish/FoodStandDishScreen";
+import FoodStandDishScreen from "../../../screens/settings/fdDishSettings/FoodStandDishScreen";
+import DishesScreen from "../../../screens/settings/fdDishSettings/DishesScreen";
 const FdDishSettisgStackNav = () => {
   return (
     <FoodStandDishSettingsStack.Navigator
@@ -25,6 +26,7 @@ const FdDishSettisgStackNav = () => {
         initialRouteName="AllFoodStands"
     >
         <FoodStandDishSettingsStack.Screen name='AllFoodStands' component={FoodStandDishScreen} />
+        <FoodStandDishSettingsStack.Screen name='Dishes' component={DishesScreen} />
     </FoodStandDishSettingsStack.Navigator>
   )
 }

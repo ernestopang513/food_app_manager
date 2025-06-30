@@ -39,7 +39,7 @@ const AllDishesScreen = ({navigation : {navigate}}: Props) => {
             }
             {
                 !dishes && !isLoading && isError &&
-                <ErrorScreen message={error.message ?? 'error artificial'} />
+                <ErrorScreen message={error.message ?? 'Error inesperado'} />
             }
 
             {

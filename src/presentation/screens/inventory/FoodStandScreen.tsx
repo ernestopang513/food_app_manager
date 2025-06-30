@@ -2,7 +2,7 @@ import TopNavigationLayout from '../../layouts/TopNavigationLayout'
 import { StackScreenProps } from '@react-navigation/stack'
 import { StackParamsInventory } from '../../routes/inventory/StackNavigationInventory'
 import { useQuery } from '@tanstack/react-query'
-import { getFoodStandById } from '../../../actions/foodStands/get-foodStand-by-id'
+import { getFilterFoodStandById } from '../../../actions/foodStands/get-foodStand-by-id'
 import { LoadingScreen } from '../loading/LoadingScreen'
 import ErrorScreen from '../../components/ui/ErrorScreen'
 import DishQuantityController from './DishQuantityController'
@@ -20,7 +20,7 @@ const FoodStandScreen = ({route}: Props) => {
 
   const {data: foodStand, isLoading, error, refetch} = useQuery({
     queryKey: ['foodStand', foodStandId],
-    queryFn: () => getFoodStandById(foodStandId)
+    queryFn: () => getFilterFoodStandById(foodStandId)
   })
 
   const title = isLoading

@@ -1,17 +1,14 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, TouchableOpacity } from 'react-native';
-import FoodStandScreen from '../../screens/inventory/FoodStandScreen';
 import SettingsScreen from '../../screens/settings/SettingsScreen';
 import { fadeAnimation } from '../shared/fade_animation';
-import FoodStandSettinsScreen from '../../screens/inventory/FoodStandSettingsScreen';
-import TemporalScreen from '../../screens/develop/TemporalScreen';
 import FdSettingsStackNav from './foodStandNav/FdSettingsStackNav';
-import Icon from '@react-native-vector-icons/ionicons';
-import { Text } from '@ui-kitten/components';
 import DishSettingsStackNav from './dishNav/DishSettingsStackNav';
 import DeliveryPStackNav from './deliveryPointNav/DeliveryPStackNav';
-import Prueba from '../../screens/settings/fdDish/prueba';
 import FdDishSettisgStackNav from './foodStandDishNav/fdDishSettisgStackNav';
+import CreateAdminScreen from '../../screens/settings/adminSettings/CreateAdminScreen';
+import AllAdminScreen from '../../screens/settings/adminSettings/AllAdminScreen';
+import AllEmployeeScreen from '../../screens/settings/adminSettings/AllEmployeeScreen';
+import CreateEmployeeScreen from '../../screens/settings/adminSettings/CreateEmployeeScreen';
 
 
 export type StackParamsSettings = {
@@ -19,7 +16,11 @@ export type StackParamsSettings = {
   DishScreen: undefined
   FoodStandDishes: undefined
   DeliveryPoint: undefined
-  SettingsScreen: undefined
+  SettingsScreen: undefined;
+  CreateAdminScreen: undefined;
+  AllEmployeeScreen: undefined;
+  AllAdminScreen: undefined;
+  CreateEmployeeScreen: undefined;
 }
 
 const SettingsStack = createStackNavigator<StackParamsSettings>();
@@ -37,6 +38,10 @@ const SettingsStackNavigation = () => {
       <SettingsStack.Screen name='DishScreen' component={DishSettingsStackNav} />
       <SettingsStack.Screen name='FoodStandDishes' component={FdDishSettisgStackNav} />
       <SettingsStack.Screen name='DeliveryPoint' component={DeliveryPStackNav} />
+      <SettingsStack.Screen name='CreateAdminScreen' component={CreateAdminScreen} />
+      <SettingsStack.Screen name='CreateEmployeeScreen' component={CreateEmployeeScreen} />
+      <SettingsStack.Screen name='AllEmployeeScreen' component={AllEmployeeScreen} />
+      <SettingsStack.Screen name='AllAdminScreen' component={AllAdminScreen} />
       <SettingsStack.Screen
         name='SettingsScreen'
         component={SettingsScreen}

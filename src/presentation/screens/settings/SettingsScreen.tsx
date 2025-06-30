@@ -34,8 +34,18 @@ const optionsItemsAction: optionItem[] = [
     icon: 'location-outline',
     component: 'DeliveryPoint',
   },
-  
+   {
+    name: 'Admin',
+    icon: 'star-outline',
+    component: 'AllAdminScreen'
+  },
+   {
+    name: 'Employee',
+    icon: 'sparkles-outline',
+    component: 'AllEmployeeScreen'
+  },
 ]
+
 
 
 

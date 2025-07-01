@@ -1,6 +1,6 @@
 import { List } from '@ui-kitten/components';
 import { useCallback, useState } from 'react';
-import { RefreshControl } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { FoodStand } from '../../../../domain/entities/foodStand';
 import { FoodStandCard } from '../../foodStands/FoodStandCard';
 import { StackParamsSettings } from '../../../routes/settings/SettingsStackNavigation';
@@ -44,6 +44,8 @@ const FoodStandsList = ({foodStands, onRefresh}: Props) => {
         refreshControl={
             <RefreshControl  refreshing={refreshing} onRefresh={handleRefresh}    />
         }
+        ListFooterComponent={<View/>}
+        ListFooterComponentStyle = {{height: 40}}
     />
   )
 }

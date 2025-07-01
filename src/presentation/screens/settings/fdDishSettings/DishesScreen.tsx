@@ -134,6 +134,8 @@ const DishesScreen = ({ route }: Props) => {
                     ListEmptyComponent={
                         <NoticeScreen title={'Sin platillos asociados'} message={'Puedes agregar alguno!'} />
                     }
+                    ListFooterComponent={<View />}
+                    ListFooterComponentStyle = {{height: 40}}
                 />
 
             }

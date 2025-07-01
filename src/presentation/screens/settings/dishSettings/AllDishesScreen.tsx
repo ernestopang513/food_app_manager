@@ -47,14 +47,16 @@ const AllDishesScreen = ({navigation : {navigate}}: Props) => {
                 <NoticeScreen title='Sin platillos' message='No hay platillos, puedes crear uno!' />
             }
 
-            {
-                !isLoading && !isError && !!dishes && dishes.length !== 0 &&
-                <FlatList
-                    data={dishes}
-                    keyExtractor={(item) => `${item.id}`}
-                    renderItem={({item}) => <DishCard dish = {item} onPress={() => navigate('Dish', {dishId: item.id})} />}
-                />
-            }
+        {
+          !isLoading && !isError && !!dishes && dishes.length !== 0 &&
+          <FlatList
+            data={dishes}
+            keyExtractor={(item) => `${item.id}`}
+            renderItem={({ item }) => <DishCard dish={item} onPress={() => navigate('Dish', { dishId: item.id })} />}
+            ListFooterComponent={<View />}
+            ListFooterComponentStyle={{ height: 40 }}
+          />
+        }
 
         </Layout>
     </TopNavigationLayout>

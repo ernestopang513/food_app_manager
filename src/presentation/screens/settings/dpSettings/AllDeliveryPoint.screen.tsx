@@ -44,14 +44,16 @@ const AllDeliveryPoint = ({navigation}: Props) => {
 
         {
             !isLoading && !isError && !!deliveryPoints && deliveryPoints.length !== 0 &&
-            <FlatList
-                  data={deliveryPoints}
-                  contentContainerStyle = {{paddingHorizontal: 20}}
-                  keyExtractor={(item,index) => `${item.id}-${index}`} 
-                  renderItem={
-                    ({item}) => <DeliveryPointCard deliveryPoint={item} onPress={() => navigation.navigate('DeliveryPointScreen', {deliveryPId: item.id})} />
-                  }
-            />
+        <FlatList
+          data={deliveryPoints}
+          contentContainerStyle={{ paddingHorizontal: 20 }}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          renderItem={
+            ({ item }) => <DeliveryPointCard deliveryPoint={item} onPress={() => navigation.navigate('DeliveryPointScreen', { deliveryPId: item.id })} />
+          }
+          ListFooterComponent={<View />}
+          ListFooterComponentStyle={{ height: 40 }}
+        />
 
         }
 

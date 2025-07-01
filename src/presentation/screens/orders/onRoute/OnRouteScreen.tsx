@@ -6,6 +6,7 @@ import DeliveryPointList from '../../../components/orders/DeliveryPointList'
 import NoticeScreen from '../../../components/ui/NoticeScreen'
 import { useFocusEffect } from '@react-navigation/native'
 import { useCallback } from 'react'
+import ErrorScreen from '../../../components/ui/ErrorScreen'
 
 const OnRouteScreen = () => {
 
@@ -40,6 +41,15 @@ const OnRouteScreen = () => {
         message='Elige un foodStand en la pesaña de local.'
       />
     )}
+
+    if (onRouteOrders.isError) {
+        return (
+            <ErrorScreen
+                message={onRouteOrders.error.message ?? 'Error inesperado'}
+                onRetry={onRouteOrders.refetch} />
+        )
+    }
+
   
   return (
 
@@ -48,8 +58,8 @@ const OnRouteScreen = () => {
     <DeliveryPointList
      foodStandName = {foodStandName}
      isLoading = {onRouteOrders.isLoading}
-     isError = {onRouteOrders.isError}
      OnRouteOrders = {onRouteOrders.data}
+     refetch={onRouteOrders.refetch}
     />
 
   )

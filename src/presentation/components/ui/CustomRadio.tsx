@@ -5,7 +5,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 interface Props {
   label?: string;
   selected: boolean;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const CustomRadio: React.FC<Props> = ({ label, selected, onPress }) => {
@@ -13,7 +13,7 @@ const CustomRadio: React.FC<Props> = ({ label, selected, onPress }) => {
     // if (selected === true) return;
 
   return (
-    <Pressable style={styles.container} onPress={onPress} disabled = {selected}>
+    <Pressable style={styles.container} onPress={() => onPress?.()} disabled = {selected}>
       <View style={[styles.radioOuter, selected && styles.radioOuterSelected]}>
         {selected && <View style={styles.radioInner} />}
       </View>

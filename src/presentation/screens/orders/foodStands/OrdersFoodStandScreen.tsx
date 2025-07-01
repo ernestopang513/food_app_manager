@@ -32,7 +32,6 @@ const OrdersFoodStandScreen = () => {
   const setFoodStandId = useOrderStore(state => state.setFoodStandId);
   const setFoodStandName = useOrderStore(state => state.setFoodStandName);
 
-  const navigation = useNavigation<NavigationProp>();
 
   if(isError && !isLoading && !foodStands) {
     return (
@@ -51,9 +50,7 @@ const OrdersFoodStandScreen = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle = {{paddingHorizontal: 20, paddingTop: 30}}
         ListHeaderComponent={
-          // <View>
             <Text category='label' >Elige un local para ver las ordenes</Text>
-          // </View>
         }
         ListHeaderComponentStyle = {{padding: 10}}
         renderItem={({item, index})=> (
@@ -77,41 +74,5 @@ const OrdersFoodStandScreen = () => {
         }
       />
     )
-
-  // return (
-
-  //   <Layout style = {{flex: 1, paddingHorizontal: 20}}>
-
-
-  //   <ScrollView
-  //     style = {{marginTop: 20}}
-  //   >
-
-  //     {
-  //       !foodStands && isLoading && <SkeletonCard/>
-  //     }
-
-  //     {
-  //       !isLoading && !error && foodStands &&
-  //       foodStands.map((item, index) => (
-  //         <FoodStandController
-  //           key = {item.id}
-  //           name={item.name}
-  //           isFirst={index === 0}
-  //           isLast={index === foodStands.length - 1}
-  //           isSelected={foodStandId === item.id }
-  //           onChange={() => {
-  //             setFoodStandId(item.id);
-  //             setFoodStandName(item.name);
-  //             // navigation.navigate('En espera', {
-  //             //   screen: 'OnWaitingScreen',
-  //             // });
-  //           }}
-  //         />
-  //       ))
-  //       }
-  //     </ScrollView>
-  //   </Layout>
-  // )
 }
 export default OrdersFoodStandScreen

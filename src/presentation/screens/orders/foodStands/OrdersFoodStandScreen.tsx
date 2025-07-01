@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { ScrollView } from 'react-native'
+import { FlatList, ScrollView } from 'react-native'
 import { getAllFoodStandsWithDishes } from '../../../../actions/foodStands/get-all-foodStand'
 import { Layout } from '@ui-kitten/components'
 import SkeletonCard from '../../../components/ui/SkeletonCard'
@@ -10,6 +10,8 @@ import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tab
 import { StackNavigationProp } from '@react-navigation/stack'
 import { OrderTabsParamList } from '../../../routes/orders/OrderStackNavigation'
 import { StackParamsWaiting } from '../../../routes/orders/waitingStack/WaitingStackNavigator'
+import ErrorScreen from '../../../components/ui/ErrorScreen'
+import NoticeScreen from '../../../components/ui/NoticeScreen'
 
 type NavigationProp = CompositeNavigationProp<
   MaterialTopTabNavigationProp<OrderTabsParamList, 'En espera'>,
@@ -19,7 +21,7 @@ type NavigationProp = CompositeNavigationProp<
 
 const OrdersFoodStandScreen = () => {
 
-    const {data: foodStands, isLoading, error, refetch} = useQuery({
+    const {data: foodStands, isLoading, isError, error, refetch} = useQuery({
     queryKey: ['foodStands'],
     queryFn: getAllFoodStandsWithDishes,
     staleTime: 0,
@@ -32,40 +34,76 @@ const OrdersFoodStandScreen = () => {
 
   const navigation = useNavigation<NavigationProp>();
 
-  return (
+  if(isError && !isLoading && !foodStands) {
+    return (
+      <ErrorScreen 
+        onRetry={refetch}
+        message={error.message}
+      />
+    )
+  }
 
-    <Layout style = {{flex: 1, paddingHorizontal: 20}}>
 
-
-    <ScrollView
-      style = {{marginTop: 20}}
-    >
-
-      {
-        !foodStands && isLoading && <SkeletonCard/>
-      }
-
-      {
-        !isLoading && !error && foodStands &&
-        foodStands.map((item, index) => (
+    return (
+      <FlatList
+        data={foodStands}
+        style = {{backgroundColor: 'white'}}
+        contentContainerStyle = {{paddingHorizontal: 20, paddingTop: 30}}
+        renderItem={({item, index})=> (
           <FoodStandController
             key = {item.id}
             name={item.name}
             isFirst={index === 0}
-            isLast={index === foodStands.length - 1}
+            //! foodStands posiblemente undefined
+            isLast={index === foodStands!.length - 1}
             isSelected={foodStandId === item.id }
             onChange={() => {
               setFoodStandId(item.id);
               setFoodStandName(item.name);
-              // navigation.navigate('En espera', {
-              //   screen: 'OnWaitingScreen',
-              // });
             }}
           />
-        ))
+        )}
+        ListEmptyComponent={
+          isLoading ? <SkeletonCard/> :
+          <NoticeScreen title='No hay locales con platillos asociados' message='Crear locales y agregar paltillos en Ajustes' />
         }
-      </ScrollView>
-    </Layout>
-  )
+      />
+    )
+
+  // return (
+
+  //   <Layout style = {{flex: 1, paddingHorizontal: 20}}>
+
+
+  //   <ScrollView
+  //     style = {{marginTop: 20}}
+  //   >
+
+  //     {
+  //       !foodStands && isLoading && <SkeletonCard/>
+  //     }
+
+  //     {
+  //       !isLoading && !error && foodStands &&
+  //       foodStands.map((item, index) => (
+  //         <FoodStandController
+  //           key = {item.id}
+  //           name={item.name}
+  //           isFirst={index === 0}
+  //           isLast={index === foodStands.length - 1}
+  //           isSelected={foodStandId === item.id }
+  //           onChange={() => {
+  //             setFoodStandId(item.id);
+  //             setFoodStandName(item.name);
+  //             // navigation.navigate('En espera', {
+  //             //   screen: 'OnWaitingScreen',
+  //             // });
+  //           }}
+  //         />
+  //       ))
+  //       }
+  //     </ScrollView>
+  //   </Layout>
+  // )
 }
 export default OrdersFoodStandScreen

@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native'
+import { View, ScrollView, FlatList } from 'react-native'
 import { getOnRouteOrders } from '../../../../actions/orders/get-onRoute-orders'
 import { useOrderInfo } from '../../../hooks/orders/useOrderInfo';
 import { useOrderStore } from '../../../store/orders/useOrdersStore';
@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFabStore } from '../../../store/orders/useFabStore';
 import { log } from '../../../../config/loggers/logger';
+import NoticeScreen from '../../../components/ui/NoticeScreen';
 
 interface Props extends StackScreenProps<StackParamsOnRoute, 'DeliveryScreen'>{}
 
@@ -38,7 +39,7 @@ const DeliveryPointOnRouteScreen = ({route, navigation}: Props) => {
     // refetch();////////////////////
     setTimeout(()=>{
       setShowFab(false);
-    }, 1500)
+    }, 550)
   }
 
   
@@ -70,41 +71,27 @@ const DeliveryPointOnRouteScreen = ({route, navigation}: Props) => {
   
   return (
     <>
-    <Layout style = {{flex: 1, paddingHorizontal: 20, paddingTop: 20}}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
-
-      <Text category='h2' 
-        style ={{textAlign: 'center'}}
-        >{dpName}</Text>
-      <Text category='label' 
-        style ={{textAlign: 'center', marginBottom: 20}}
-        >{foodStandName}</Text>
-
-          {
-            isLoading &&
-            <AnimatedCardWrapper>
-              <SkeletonCard/>
-            </AnimatedCardWrapper>
-          }
-
-          {
-             !isLoading && !onRouteOrders && isError && <ErrorScreen message={error?.message} />
-          }
-
-          {
-            onRouteOrders && onRouteOrders?.length === 0 && !isLoading && !isError
-            && <View>
-              <Text status='warning' category='h5' style={{textAlign: 'center'}}>Nada que repartir</Text>
-              {/* <Icon name=''  /> */}
-            </View> 
-          }
-
-          {
-            !isLoading && !isError && onRouteOrders?.map((item) => (
-              <AnimatedCardWrapper
-                key={item.id}
+       <FlatList
+        data={onRouteOrders}
+        initialNumToRender={5}
+        style={{ backgroundColor: '#fff' }}
+        keyExtractor={(item)=> item.id}
+        ListHeaderComponentStyle={{ paddingTop: 15, marginBottom: 10 }}
+        contentContainerStyle={{ paddingHorizontal: 20 }}
+        // refreshing = {refreshing}
+        // onRefresh={handleRefresh}
+        ListHeaderComponent={
+          <View>
+            <Text category='h2'
+              style={{ textAlign: 'center' }}
+            >{dpName}</Text>
+            <Text category='label'
+              style={{ textAlign: 'center' }}
+            >{foodStandName}</Text>
+          </View>
+        }
+        renderItem={({ item }) => (
+          <AnimatedCardWrapper
               >
                 <OnDeliveryOrderInfo
                   style={{ marginVertical: 10 }}
@@ -116,13 +103,13 @@ const DeliveryPointOnRouteScreen = ({route, navigation}: Props) => {
                   handleOrderStatus={handleOrderStatus}
                 />
               </AnimatedCardWrapper>
-            ))
-          }
-
-      <View style ={{height: 50}} />
-
-      </ScrollView>
-    </Layout>
+        )}
+        ListEmptyComponent={
+          isLoading ?
+            <SkeletonCard /> :
+            <NoticeScreen title='Sin pedidos!' message='Descansa' />
+        }
+      />
       <FAB
         style ={{
           position: 'absolute',

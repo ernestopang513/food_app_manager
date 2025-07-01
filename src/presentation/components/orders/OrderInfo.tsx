@@ -106,7 +106,12 @@ const OrderInfo = ({ totalPrice, orderId, userName, orderDish, style, handleOrde
     }}>
       <Card
         header={() => <Header userName={userName} />}
-        footer={() => <Footer setOnRoute={setOnRoute.mutate} cancelOrder={cancelOrder.mutate} />}
+        footer={() => <Footer 
+                        setOnRoute={setOnRoute.mutate} 
+                        cancelOrder={cancelOrder.mutate} 
+                        setDisabled ={setOnRoute.isPending} 
+                        cancelDisabled = {cancelOrder.isPending} 
+                      />}
         style={[{ borderWidth: 2, marginBottom: 10 }, style]}
         disabled={true}
       >
@@ -145,18 +150,22 @@ const Header = ({userName}: {userName: string}) => (
 interface FooterProps {
   setOnRoute: () => void;
   cancelOrder: () => void;
+  setDisabled: boolean;
+  cancelDisabled: boolean;
 }
 
-const Footer = ({setOnRoute, cancelOrder}:FooterProps) => (
+const Footer = ({setOnRoute, cancelOrder,setDisabled, cancelDisabled}:FooterProps) => (
   <View style = {{flexDirection: 'row', justifyContent: 'space-around', padding: 20, }}>
     <Button
       onPress={setOnRoute}
+      disabled ={setDisabled}
       status='success'
     >
       Aceptar
     </Button>
     <Button
       onLongPress={cancelOrder}
+      disabled = {cancelDisabled}
       status='danger'
     >
       Cancelar

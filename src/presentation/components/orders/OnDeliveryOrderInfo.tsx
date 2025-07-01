@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Button, Card, Layout, Text } from '@ui-kitten/components'
+import { Button, Card, Layout, Text, useTheme } from '@ui-kitten/components'
 import { Animated, StyleProp, View, ViewStyle} from 'react-native'
 import { getWaitingOrders } from '../../../actions/orders/get-waiting-orders';
 import { useOrderStore } from '../../store/orders/useOrdersStore';
@@ -27,6 +27,8 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
   const foodStandId = useOrderStore(state => state.foodStandId);
   const deliveryUserId = useAuthStore(state => state.user?.id);
 
+  const theme = useTheme();
+
   //* Animaciones
   const opacityAnim = useRef(new Animated.Value(1)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -50,6 +52,7 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
     ]).start(() => {
     });
   };
+  
 
 
   const completeOrder = useMutation({
@@ -80,7 +83,9 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
     onSuccess: () => {
       setLabel('Se regresó la orden');
       setIconName('checkmark-circle-outline');
-      setBackgroundColor('#50c878');
+      // setBackgroundColor('#50c878');
+      setBackgroundColor(theme['color-warning-500']);
+
       handleOrderStatus();
       hideWithAnimation();
     },
@@ -156,11 +161,13 @@ const OnDeliveryOrderInfo = ({totalPrice, orderId, deliveryPointId, userName, or
 export default OnDeliveryOrderInfo
 
 
-const Header = ({userName}: {userName: string}) => (
-    <View style ={{padding: 10, backgroundColor: '#E0E7FF'}}>
+const Header = ({userName}: {userName: string}) =>{ 
+  const theme = useTheme();
+  return (
+    <View style ={{padding: 10, backgroundColor: theme['color-warning-400']}}>
         <Text category='h6'>{userName}</Text>
     </View>
-)
+)}
 
 interface FooterProps {
   completeOrder: () => void,

@@ -49,7 +49,7 @@ const DeliveryPointScreen = ({ route }: Props) => {
 
     setTimeout(() => {
       setShowFab(false);
-    }, 1500)
+    }, 550)
   }
 
   if (waitingOrders.isError) {

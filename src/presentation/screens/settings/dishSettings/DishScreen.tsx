@@ -27,194 +27,196 @@ import ConfirmationModal from '../../../components/ui/ConfirmationModal';
 // }
 
 const empyDish: Partial<Dish> = {
-    name: 'Nuevo platillo',
-    price: 60,
-    description: 'Comida muy bien preparada'
+  name: 'Nuevo platillo',
+  price: 60,
+  description: 'Comida muy bien preparada'
 }
 
-interface Props extends StackScreenProps<StackParamsDishSettings, 'Dish'> {}
+interface Props extends StackScreenProps<StackParamsDishSettings, 'Dish'> { }
 
-const DishScreen = ({route, navigation}: Props) => {
-    
-    
-    const dishIdRef = useRef(route.params.dishId)
-
-    const queryClient = useQueryClient();
-
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-    const mutationError = useUIStore(state => state.mutationError);
-    const setMutationError = useUIStore(state => state.setMutationError);
-
-    const isNew = dishIdRef.current === 'new'
-
-    const {data: dish, isLoading, isError, error} = useQuery({
-        queryKey: ['dish', dishIdRef.current],
-        queryFn: () => getDishById(dishIdRef.current),
-        // queryFn: () => getDishById('A'),
-        enabled: !isNew
-    });
+const DishScreen = ({ route, navigation }: Props) => {
 
 
-    const finalDish = isNew? empyDish : (dish ?? empyDish)
+  const dishIdRef = useRef(route.params.dishId)
 
-    const updateCreateMutation = useMutation({
-      mutationFn: (data: Partial<Dish>) => updateCreateDish({...data, id: finalDish.id}),
-      onSuccess: (data: Dish) => {
-        dishIdRef.current = data.id;
-        queryClient.invalidateQueries({queryKey: ['AllDishesSettings']})
-        queryClient.invalidateQueries({queryKey: ['dish', dishIdRef.current]})
-      },
-      onError: (error) => {
-        setMutationError(error.message ?? 'Error inesperado');
-      }
-      
-    });
+  const queryClient = useQueryClient();
 
-    const DeleteMutation = useMutation({
-      mutationFn: () => {
-        if(finalDish.id === undefined) throw new Error('Faltan parametros');
-        return deleteDishById(finalDish.id)
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: ['AllDishesSettings']})
-        setShowDeleteConfirm(false);
-        navigation.goBack();
-      },
-      onError: (error) => {
-        setShowDeleteConfirm(false);
-        setMutationError(error.message ?? 'Error inesperado');
-      }
-    })
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const mutationError = useUIStore(state => state.mutationError);
+  const setMutationError = useUIStore(state => state.setMutationError);
+
+  const isNew = dishIdRef.current === 'new'
+
+  const { data: dish, isLoading, isError, error } = useQuery({
+    queryKey: ['dish', dishIdRef.current],
+    queryFn: () => getDishById(dishIdRef.current),
+    // queryFn: () => getDishById('A'),
+    enabled: !isNew
+  });
 
 
-    if(isLoading) {
-        return (
-            <TopNavigationLayout 
-            title={'Cargando...'}
-            
-            >
-                <View style = {{marginHorizontal: 20, flex: 1}}>
-                    <SkeletonCard style={{marginTop: 30}} />
-                </View>
+  const finalDish = isNew ? empyDish : (dish ?? empyDish)
 
-            </TopNavigationLayout>
-        )
+  const updateCreateMutation = useMutation({
+    mutationFn: (data: Partial<Dish>) => updateCreateDish({ ...data, id: finalDish.id }),
+    onSuccess: (data: Dish) => {
+      dishIdRef.current = data.id;
+      queryClient.invalidateQueries({ queryKey: ['AllDishesSettings'] })
+      queryClient.invalidateQueries({ queryKey: ['dish', dishIdRef.current] })
+    },
+    onError: (error) => {
+      setMutationError(error.message ?? 'Error inesperado');
     }
 
-    if(isError) {
-        return (
-            <TopNavigationLayout
-                title = 'Error'
-            >
-                <ErrorScreen message={error.message} />
-            </TopNavigationLayout>
-        )
+  });
+
+  const DeleteMutation = useMutation({
+    mutationFn: () => {
+      if (finalDish.id === undefined) throw new Error('Faltan parametros');
+      return deleteDishById(finalDish.id)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['AllDishesSettings'] })
+      setShowDeleteConfirm(false);
+      navigation.goBack();
+    },
+    onError: (error) => {
+      setShowDeleteConfirm(false);
+      setMutationError(error.message ?? 'Error inesperado');
     }
+  })
+
+
+  if (isLoading) {
+    return (
+      <TopNavigationLayout
+        title={'Cargando...'}
+
+      >
+        <View style={{ marginHorizontal: 20, flex: 1 }}>
+          <SkeletonCard style={{ marginTop: 30 }} />
+        </View>
+
+      </TopNavigationLayout>
+    )
+  }
+
+  if (isError) {
+    return (
+      <TopNavigationLayout
+        title='Error'
+      >
+        <ErrorScreen message={error.message} />
+      </TopNavigationLayout>
+    )
+  }
 
 
 
 
   return (
 
-      <Formik
-        initialValues={finalDish}
-        enableReinitialize
-        validationSchema={DishSchema}
-        onSubmit={(values) =>{
-          updateCreateMutation.mutate(values)
-        }}
-      >
-        {
-              ({handleChange, handleSubmit, values, touched, errors}) => (
-                  <TopNavigationLayout
-                      title={values.name ?? 'Algo salio mal'}
-                      renderRightAction={isNew? undefined : () => <Delete deleteFunction={setShowDeleteConfirm} />}
-                  >
+    <Formik
+      initialValues={finalDish}
+      enableReinitialize
+      validationSchema={DishSchema}
+      onSubmit={(values) => {
+        updateCreateMutation.mutate(values)
+      }}
+    >
+      {
+        ({ handleChange, handleSubmit, values, touched, errors }) => (
+          <TopNavigationLayout
+            title={values.name ?? 'Algo salio mal'}
+            renderRightAction={isNew ? undefined : () => <Delete deleteFunction={setShowDeleteConfirm} />}
+          >
 
-                    <ScrollView
-                    contentContainerStyle = {{
-                        paddingHorizontal: 20,
-                        // backgroundColor: 'blue'
-                    }}
-                    >
-                        <View>
-                            <Input
-                                label={'Nombre'}
-                                value = {values.name}
-                                onChangeText={handleChange('name')}
-                                style ={{marginVertical: 10}}
-                                status = {touched.name && errors.name ? 'danger' : 'basic'}
-                                caption={touched.name && errors.name}
-                            />
-                            <Input
-                                label={'Precio'}
-                                value = {values.price?.toString()}
-                                onChangeText={handleChange('price')}
-                                style ={{marginVertical: 10}}
-                                status = {touched.price && errors.price ? 'danger' : 'basic'}
-                                caption={touched.price && errors.price}
-                            />
-                            <Input
-                                label={'Descripción'}
-                                value = {values.description}                                
-                                multiline
-                                onChangeText={handleChange('description')}
-                                style ={{marginVertical: 10}}
-                                status = {touched.description && errors.description ? 'danger' : 'basic'}
-                                caption={touched.description && errors.description}
-                                numberOfLines={5}
-                            />
-                           </View>
-                           
-                            <Button
-                                  accessoryLeft={() => <Icon name='save-outline' color={'white'} size={35} />}
-                                  style={{ marginTop: 20 }}
-                                  disabled={updateCreateMutation.isPending}
-                                  onPress={() => handleSubmit()}
-                            >
-                                Guardar
-                            </Button>
+            <ScrollView
+              keyboardShouldPersistTaps='handled'
 
-                    </ScrollView>
-                    
-                  <NativeCustomModal
-                    visible={!!mutationError}
-                    title='Error'
-                    message={mutationError}
-                    loading={updateCreateMutation.isPending}
-                    disabled={updateCreateMutation.isPending}
-                    disabledBackdrop={false}
-                    onClose={() => {
-                      setMutationError(undefined);
-                    }}
-                  />
+              contentContainerStyle={{
+                paddingHorizontal: 20,
+                // backgroundColor: 'blue'
+              }}
+            >
+              <View>
+                <Input
+                  label={'Nombre'}
+                  value={values.name}
+                  onChangeText={handleChange('name')}
+                  style={{ marginVertical: 10 }}
+                  status={touched.name && errors.name ? 'danger' : 'basic'}
+                  caption={touched.name && errors.name}
+                />
+                <Input
+                  label={'Precio'}
+                  value={values.price?.toString()}
+                  onChangeText={handleChange('price')}
+                  style={{ marginVertical: 10 }}
+                  status={touched.price && errors.price ? 'danger' : 'basic'}
+                  caption={touched.price && errors.price}
+                />
+                <Input
+                  label={'Descripción'}
+                  value={values.description}
+                  multiline
+                  onChangeText={handleChange('description')}
+                  style={{ marginVertical: 10 }}
+                  status={touched.description && errors.description ? 'danger' : 'basic'}
+                  caption={touched.description && errors.description}
+                  numberOfLines={5}
+                />
+              </View>
 
-                  {
-                    showDeleteConfirm &&
-                    <ConfirmationModal
-                      onAccepted={() => DeleteMutation.mutate()}
-                      onCancel={() => { setShowDeleteConfirm(false) }}
-                    />
-                  }
+              <Button
+                accessoryLeft={() => <Icon name='save-outline' color={'white'} size={35} />}
+                style={{ marginTop: 20 }}
+                disabled={updateCreateMutation.isPending}
+                onPress={() => handleSubmit()}
+              >
+                Guardar
+              </Button>
 
-                  </TopNavigationLayout>
+            </ScrollView>
 
-              )
+            <NativeCustomModal
+              visible={!!mutationError}
+              title='Error'
+              message={mutationError}
+              loading={updateCreateMutation.isPending}
+              disabled={updateCreateMutation.isPending}
+              disabledBackdrop={false}
+              onClose={() => {
+                setMutationError(undefined);
+              }}
+            />
 
-        }
-      </Formik>
+            {
+              showDeleteConfirm &&
+              <ConfirmationModal
+                onAccepted={() => DeleteMutation.mutate()}
+                onCancel={() => { setShowDeleteConfirm(false) }}
+              />
+            }
+
+          </TopNavigationLayout>
+
+        )
+
+      }
+    </Formik>
   )
 }
 export default DishScreen
 
-export const Delete = ({deleteFunction}:{ deleteFunction: (state: boolean) => void}) => {
+export const Delete = ({ deleteFunction }: { deleteFunction: (state: boolean) => void }) => {
   const theme = useTheme();
-  return(
+  return (
 
     <Pressable
       onLongPress={() => deleteFunction?.(true)}
-    //   onPress={() => {}}
+      //   onPress={() => {}}
       style={({ pressed }) => ({
         alignItems: 'center',
         justifyContent: 'center',
@@ -225,7 +227,7 @@ export const Delete = ({deleteFunction}:{ deleteFunction: (state: boolean) => vo
       <Icon
         style={{ height: 24 }}
         name={'trash'}
-        color ={theme['color-danger-500']}
+        color={theme['color-danger-500']}
 
       />
       {/* <Text appearance='hint' category="label">Eliminar</Text> */}

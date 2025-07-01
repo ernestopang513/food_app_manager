@@ -120,9 +120,11 @@ const DeliveryPointSettingsScreen = ({ route, navigation }: Props) => {
                 ({ values, handleChange, handleSubmit, setFieldValue, touched, errors }) => (
                     <TopNavigationLayout
                         title={values.name ?? 'Algo salio mal'}
-                        renderRightAction={isNew? undefined: () => <Delete deleteFunction={setShowDeleteConfirm} />}
+                        renderRightAction={isNew ? undefined : () => <Delete deleteFunction={setShowDeleteConfirm} />}
                     >
                         <ScrollView
+                            keyboardShouldPersistTaps='handled'
+
                             contentContainerStyle={{
                                 paddingHorizontal: 20
                             }}

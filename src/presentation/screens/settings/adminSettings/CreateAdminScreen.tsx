@@ -72,6 +72,7 @@ const CreateAdminScreen = ({navigation}: Props) => {
 
             <ScrollView
               contentContainerStyle={{ paddingHorizontal: 20, gap: 30, paddingTop: 30 }}
+              keyboardShouldPersistTaps = 'handled'
             >
 
 

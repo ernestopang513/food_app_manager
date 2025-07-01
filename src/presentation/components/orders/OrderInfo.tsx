@@ -83,8 +83,9 @@ const OrderInfo = ({ totalPrice, orderId, userName, orderDish, style, handleOrde
     onSuccess: () => {
       setLabel('Orden cancelada');
       setIconName('checkmark-circle-outline');
-      setBackgroundColor(theme['color-warning-600']);
+      // setBackgroundColor(theme['color-warning-500']);
       queryClient.invalidateQueries({ queryKey: ['onRouteOrdesByDeliveryPoint'] });
+      setBackgroundColor('#50c878');
       queryClient.invalidateQueries({ queryKey: ['OrdersForDelivery'] });
       handleOrderStatus();
       hideWithAnimation(); // 👈 animación antes de cambiar
